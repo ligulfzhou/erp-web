@@ -1,16 +1,10 @@
 import LayoutWithMenu from "@/components/Layouts/LayoutWithMenu";
-import {PageContainer} from "@ant-design/pro-components";
 
 
-
-
-
-export default function Home() {
+export default function Index() {
     return (
         <LayoutWithMenu>
-            <PageContainer content="" breadcrumbRender={false}>
-                hello world
-            </PageContainer>
+            Hello world
         </LayoutWithMenu>
     )
 }

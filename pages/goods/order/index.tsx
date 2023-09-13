@@ -5,7 +5,7 @@ export default function Index() {
     return (
         <LayoutWithMenu>
             <div className='text-black'>
-                item page
+               /goods/order page
             </div>
         </LayoutWithMenu>
     )

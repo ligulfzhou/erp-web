@@ -1,40 +1,66 @@
 import React, {FC, ReactNode, useEffect, useState} from 'react';
-import {LaptopOutlined, NotificationOutlined, UserOutlined} from '@ant-design/icons';
-import {Breadcrumb, Layout, Menu} from 'antd';
+import {LaptopOutlined, UserOutlined} from '@ant-design/icons';
+import {Layout, Menu, MenuProps} from 'antd';
 import {useRouter} from "next/router";
 import {useIsMounted} from "@/hooks/useIsMounted";
 
-const {Header, Content, Sider} = Layout;
+const {
+    Header,
+    Content,
+    Sider
+} = Layout;
 
-// const items: MenuProps['items'] = [
-const items = [
+
+let customers = ["L1001", "L1002", "L1003", "L1004", "L1005", "L1006"]
+
+
+const items: MenuProps["items"] = [
     {
-        key: 'resource',
+        key: "home",
         icon: React.createElement(LaptopOutlined),
-        label: "资料",
+        label: "统计",
         children: [
             {
                 key: "/",
-                label: "商品信息"
-            },
-            {
-                key: "/item",
-                label: "商品信息"
+                label: "统计"
             }
         ]
     },
     {
-        key: 'item',
+        key: 'order',
+        icon: React.createElement(LaptopOutlined),
+        label: "订单管理",
+        children: [
+            ...customers.map(customer => ({
+                "key": `/order/${customer}`,
+                "label": customer
+            })),
+            {
+                'key': '/order',
+                'label': '所有客户'
+            }
+        ]
+    },
+    {
+        key: 'order-goods',
+        icon: React.createElement(LaptopOutlined),
+        label: "订单商品",
+        children: [...customers.map(customer => ({
+            "key": `/goods/order/${customer}`,
+            "label": customer
+        })), {
+            'key': '/goods/order',
+            'label': '所有客户'
+        }]
+    },
+    {
+        key: 'customer',
         icon: React.createElement(UserOutlined),
-        label: "label",
+        label: "客户",
         children: [
             {
-                key: "/item/index",
-                label: "dash-1-label"
-            },
-            {
-                key: "/login",
-                label: "dash-2-label"
+                key: "/customer",
+                label: "客户列表"
             }
         ]
     }
@@ -46,20 +72,23 @@ interface Props {
 
 
 const LayoutWithMenu: FC<Props> = ({
-    children
-}) => {
-    const {pathname, push} = useRouter()
+                                       children
+                                   }) => {
+    const router = useRouter()
+    const {pathname, push} = router;
     const [openedKey, setOpenedKey] = useState<string>('')
 
-    useEffect(()=> {
-        items.map(item=> item.children.map(child=> {
-            console.log(`child.key: ${child.key}`)
-            if (child.key==pathname) {
-                console.log(item.key)
-                setOpenedKey(item.key)
-            }
-        }))
-    })
+    useEffect(() => {
+        if (pathname.startsWith("/goods/order")) {
+            setOpenedKey("order-goods")
+        } else if (pathname.startsWith("/order")) {
+            setOpenedKey("order")
+        } else if (pathname == '/') {
+            setOpenedKey('home')
+        } else if (pathname == '/customer') {
+            setOpenedKey('customer')
+        }
+    }, [pathname])
 
     const isMounted = useIsMounted()
     if (!isMounted) {
@@ -68,45 +97,42 @@ const LayoutWithMenu: FC<Props> = ({
 
     return (
         <Layout style={{minHeight: '100vh'}}>
-            <Header style={{display: 'flex', alignItems: 'center', height: "3rem", backgroundColor: "white"}}>
+            <Header
+                style={{display: 'flex', alignItems: 'center', height: "3rem", backgroundColor: "white"}}
+            >
                 <div className="demo-logo font-bold">
-                    Dashboard
+                    lien后台管理
                 </div>
-                {/*<Menu theme="light" mode="horizontal" defaultSelectedKeys={['2']} items={items1} />*/}
             </Header>
             <Layout>
-                <Sider width={200} style={{background: 'white'}}>
+                <Sider
+                    width={200}
+                    style={{background: ''}}
+                    collapsible={true}
+                >
                     <Menu
+                        multiple={false}
                         onClick={(env) => {
-                            console.log(env.key)
                             push(env.key)
                         }}
                         mode="inline"
-                        defaultSelectedKeys={[pathname]}
+                        defaultSelectedKeys={[router.asPath]}
                         defaultOpenKeys={[openedKey]}
                         style={{height: '100%', borderRight: 0}}
                         items={items}
                     />
                 </Sider>
-                <Layout style={{padding: '0 24px 24px'}}>
-                    {/*<Breadcrumb style={{margin: '16px 0'}}>*/}
-                    {/*    <Breadcrumb.Item>Home</Breadcrumb.Item>*/}
-                    {/*    <Breadcrumb.Item>List</Breadcrumb.Item>*/}
-                    {/*    <Breadcrumb.Item>App</Breadcrumb.Item>*/}
-                    {/*</Breadcrumb>*/}
-
-                    {/*<Content*/}
-                    {/*    style={{*/}
-                    {/*        padding: 24,*/}
-                    {/*        margin: 0,*/}
-                    {/*        minHeight: 280,*/}
-                    {/*        background: 'white',*/}
-                    {/*    }}*/}
-                    {/*>*/}
-                    {/*    {children}*/}
-                    {/*</Content>*/}
-
-                    {children}
+                <Layout style={{padding: '12px'}}>
+                    <Content
+                        style={{
+                            padding: 12,
+                            margin: 0,
+                            minHeight: 280,
+                            background: 'white',
+                        }}
+                    >
+                        {children}
+                    </Content>
                 </Layout>
             </Layout>
         </Layout>
