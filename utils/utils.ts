@@ -1,4 +1,5 @@
-import {maxTableColumnStrLen} from '@/utils/const'
+import {maxTableColumnStrLen, progresses} from '@/utils/const'
+import {DetailedStep} from "@/types/progress";
 
 export function containsOnlyNumbers(str: string) {
     return /^\d+$/.test(str);
@@ -8,13 +9,108 @@ export async function fetcher<JSON = any>(
     input: RequestInfo,
     init?: RequestInit
 ): Promise<JSON> {
-    const res = await fetch(input, init)
+    const res = await fetch(input, {
+        credentials: 'include',
+        mode: 'cors',
+        ...init
+    })
     return res.json()
 }
 
+export function getOptionsForStep(n: number){
+    for (let progress of progresses) {
+        if (progress.step==n) {
+            return [
+                {
+                    'value': 0,
+                    'label': '请选择'
+                },
+                ...progress.options.map(option=> ({
+                    'value': option.index,
+                    'label': option.name
+                }))]
+        }
+    }
+
+    return []
+}
+
+export const getNotesForOneProgress = (oneProgress: DetailedStep)=>  {
+    return getNotesWithStepAndIndex(oneProgress.step, oneProgress.index, oneProgress.notes)
+}
+
+
+export const getNotesWithStepAndIndex= (step: number, index: number, notes: string='')=>  {
+    if (step==1 && index==0) {
+        return "下订单"
+    }
+
+    if (index==1) {
+        if (notes) {
+            return notes
+        } else {
+            return "异常(备注)"
+        }
+    }
+
+    for (let progress of progresses) {
+        if (progress.step == step) {
+            for (let option of progress.options) {
+                if (option.index==index) {
+                    return option.name
+                }
+            }
+        }
+    }
+    return ''
+}
+
+
+export const getDepartmentAndNotesWithStepAndIndex= (step: number, index: number, notes: string='')=>  {
+    if (step==1 && index==0) {
+        return "业务部:下订单"
+    }
+
+    let department = '';
+    for (let progress of progresses) {
+        if (progress.step == step) {
+            department = progress.department;
+            break
+        }
+    }
+
+    if (index==1) {
+        return `${department}:异常(备注)${notes}`
+    }
+
+    for (let progress of progresses) {
+        if (progress.step == step) {
+            for (let option of progress.options) {
+                if (option.index==index) {
+                    return `${department}:${option.name}`
+                }
+            }
+        }
+    }
+    return '不明🥲'
+}
+
+export const getColorWithStepAndIndex= (step: number, index: number)=>  {
+    let color = '#C9D2DC'
+
+    for (let progress of progresses) {
+        if (progress.step == step) {
+            for (let option of progress.options) {
+                if (option.index==index) {
+                    return option.color
+                }
+            }
+        }
+    }
+    return color
+}
 
 export function parseQueryParam(v: string[] | string | undefined) {
-    console.log(v)
     if (v === undefined) {
         return ''
     } else if (typeof v == "string") {

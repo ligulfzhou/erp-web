@@ -4,12 +4,10 @@ import {ColumnsType} from "antd/es/table";
 import useOrders from "@/hooks/useOrders";
 import {Order} from '@/types'
 import {useRouter} from "next/router";
-import {parseQueryParam} from "@/utils/utils";
+import {getColorWithStepAndIndex, getDepartmentAndNotesWithStepAndIndex, parseQueryParam} from "@/utils/utils";
 import useParameters from "@/hooks/useParameters";
 import ExcelImporter from "@/components/uploader/ExcelImporter";
 import {useState} from "react";
-import useOrderDates from "@/hooks/useOrderDates";
-
 
 export default function Order() {
     const router = useRouter()
@@ -17,8 +15,6 @@ export default function Order() {
     let customerNo = parseQueryParam(router.query.customerNo)
     const {orders, total, isLoading, isValidating, key, mutate} = useOrders(customerNo)
     const [refresh, setRefresh] = useState<boolean>(false);
-
-    const {dateWithOrders, total: dateTotal, isLoading: datesLoading} = useOrderDates(customerNo)
 
     const columns: ColumnsType<Order> = [
         {
@@ -28,7 +24,7 @@ export default function Order() {
         {
             title: "订单编号",
             dataIndex: "order_no",
-            render: (text)=> (
+            render: (text) => (
                 <div className='font-medium'>
                     {text}
                 </div>
@@ -57,11 +53,15 @@ export default function Order() {
             title: "流程进度",
             key: "step_count",
             dataIndex: 'step_count',
+            width: "500px",
             render: (_, record) => (
                 <>
-                    {Object.entries(record.steps).map((sc, index)=> (
-                        <Tag color={'red'} key={index}>
-                            {sc[0]}: {sc[1]}
+                    {record.steps.map(stepIndexCount => (
+                        <Tag color={getColorWithStepAndIndex(stepIndexCount.step, stepIndexCount.index)}
+                             key={`${record.id}-${stepIndexCount.step}-${stepIndexCount.index}`}>
+                            <div className='text-black'>
+                                {getDepartmentAndNotesWithStepAndIndex(stepIndexCount.step, stepIndexCount.index)} {stepIndexCount.count}
+                            </div>
                         </Tag>
                     ))}
                 </>

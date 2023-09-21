@@ -25,8 +25,8 @@ const AddCustomerModal: FC<Props> = (
 
     const onFinish = (values: any) => {
         callAddCustomerAPI(values).then((res) => {
-            console.log(res)
             if (res.code == 0) {
+                console.log(res)
                 message.success("添加成功")
             } else {
                 message.error(res.msg)

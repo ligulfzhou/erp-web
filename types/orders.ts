@@ -1,8 +1,9 @@
 
-export interface StepCount {
-    [key: string]: number;
+export interface StepIndexCount {
+    step: number;
+    index: number;
+    count: number;
 }
-
 export interface Order {
     id: number,
     customer_no: string,
@@ -11,7 +12,7 @@ export interface Order {
     delivery_date: number,
     is_return_order: boolean,
     is_urgent: boolean
-    steps: StepCount;
+    steps: StepIndexCount[];
 }
 
 export interface OrderGoods {
@@ -37,6 +38,22 @@ export interface OrderItem {
     notes: string | null
 }
 
+export interface OrderPlainSkuModel {
+    id: number;
+    name: string;
+    image: string;
+    sku_no: string;
+    count: number;
+    unit: string;
+    unit_price: number;
+    total_price: number;
+    notes: string;
+    step: number;
+    is_next_action: boolean;
+    current_index: number;
+    current_step: number;
+    current_notes: string;
+}
 
 export interface DateWithOrders {
     date: string;

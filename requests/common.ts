@@ -20,7 +20,9 @@ export async function _commonPost<T>(url: string, body: object): Promise<T> {
             "Content-Type": "application/json"
         },
         method: 'POST',
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
+        credentials: 'include',
+        mode: "cors"
     })
     return res.json()
 }
@@ -38,7 +40,10 @@ export async function commonEmptyGet(url: string, body: object): Promise<EmptyRe
 }
 
 export async function _commonGet<T>(url: string, params: Record<string, any>): Promise<T> {
-    let res = await fetch(`${host}${url}` + "?" + new URLSearchParams(params).toString())
+    let res = await fetch(`${host}${url}` + "?" + new URLSearchParams(params).toString(), {
+        credentials: 'include',
+        mode: 'cors'
+    })
     return res.json()
 }
 

@@ -2,7 +2,7 @@ import useSWRMutation from "swr/mutation";
 import {login} from "@/requests/account";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
 import {Button, Form, Input, message} from "antd";
-import {router} from "next/client";
+import {useRouter} from "next/router";
 
 
 export default function Index() {
@@ -11,15 +11,14 @@ export default function Index() {
         isMutating: callingLoginAPI
     } = useSWRMutation("/api/login", login)
 
+    const router = useRouter()
     const onFinish = (values: {account: string, password: string}) => {
-        console.log(values)
         console.log('Success:', values);
 
         callLoginAPI({
             account: values.account,
             password: values.password
         }).then(res=> {
-            console.log(res)
             if (res.code==0) {
                 router.replace('/')
             } else {
@@ -58,6 +57,7 @@ export default function Index() {
 
                         <Form.Item >
                             <Button
+                                loading={callingLoginAPI}
                                 className='w-full rounded'
                                 type="primary" htmlType="submit"
                             >
