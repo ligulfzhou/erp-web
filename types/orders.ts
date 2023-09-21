@@ -38,7 +38,7 @@ export interface OrderItem {
     notes: string | null
 }
 
-export interface OrderPlainSkuModel {
+export interface OrderPlainItemsModel {
     id: number;
     name: string;
     image: string;
@@ -49,6 +49,7 @@ export interface OrderPlainSkuModel {
     total_price: number;
     notes: string;
     step: number;
+    package_card: string,
     is_next_action: boolean;
     current_index: number;
     current_step: number;

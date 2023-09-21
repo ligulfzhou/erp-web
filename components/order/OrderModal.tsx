@@ -65,9 +65,9 @@ const OrderModal: FC<Props> = (
                     closeFn(false)
                 }}
                 closable={true}
-                footer={
-                    null
-                }
+                onOk={()=> {
+                    console.log("保存")
+                }}
             >
                 <Form
                     form={form}

@@ -96,19 +96,20 @@ const LayoutWithMenu: FC<Props> = ({
     }
 
     return (
-        <Layout style={{minHeight: '100vh'}}>
+        <Layout className='h-screen'>
             <Header
-                style={{display: 'flex', alignItems: 'center', height: "3rem", backgroundColor: "white"}}
+                style={{display: 'flex', alignItems: 'center', height: "3rem"}}
             >
-                <div className="demo-logo font-bold">
+                <div className="demo-logo font-bold text-white">
                     lien后台管理
                 </div>
             </Header>
             <Layout>
                 <Sider
                     width={200}
-                    style={{background: 'blue'}}
+                    style={{background: 'white'}}
                     collapsible={true}
+                    trigger={null}
                 >
                     <Menu
                         multiple={false}
@@ -123,8 +124,8 @@ const LayoutWithMenu: FC<Props> = ({
                     />
                 </Sider>
                 <Layout>
-                    <Content>
-                        <div className='bg-white p-5 m-5 rounded'>
+                    <Content className='overflow-auto'>
+                        <div className='bg-white p-5 m-5 rounded overflow-y-auto'>
                             {children}
                         </div>
                     </Content>
