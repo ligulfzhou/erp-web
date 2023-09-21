@@ -1,40 +1,20 @@
-import React, {FC, useEffect, useState} from "react";
+import React, {FC} from "react";
 import useSWRMutation from "swr/mutation";
 import {Modal, Form, Button, Input, message} from "antd";
 import {addCustomer} from "@/requests";
-import {Order} from "@/types";
-import useParameters from "@/hooks/useParameters";
-import useRouterUtils from "@/hooks/useRouterUtils";
 
 
 interface Props {
     open: boolean,
     closeFn: (success: boolean) => void,
-    orders: Order[]
 }
 
 const OrderModal: FC<Props> = (
     {
         open,
         closeFn,
-        orders
     }
 ) => {
-    const {order_id, order_no} = useParameters()
-    const [curOrder, setCurOrder] = useState<Order | undefined>();
-    const [isEdit, setIsEdit] = useState<boolean>(true)
-    const {removeParams} = useRouterUtils();
-
-    useEffect(() => {
-        if (!order_id && !order_no) {
-            setIsEdit(false)
-        } else {
-            setIsEdit(true)
-            let findOrders = orders.filter(order=> order.order_no == order_no || order.id == order_id);
-            setCurOrder(findOrders[0])
-        }
-    }, [order_id, order_no])
-
     const {
         trigger: callAddCustomerAPI,
         isMutating: callingAddCustomerAPI
@@ -57,11 +37,10 @@ const OrderModal: FC<Props> = (
         <div>
             <Modal
                 open={open}
-                title={`${isEdit ? "编辑" : "添加"}订单`}
+                title='添加客户'
                 onCancel={(e) => {
                     e.preventDefault()
                     form.resetFields()
-                    removeParams(['order_id', 'order_no'])
                     closeFn(false)
                 }}
                 closable={true}

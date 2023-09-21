@@ -4,7 +4,7 @@ import {ColumnsType} from "antd/es/table";
 import useOrders from "@/hooks/useOrders";
 import {Order} from '@/types'
 import {useRouter} from "next/router";
-import {parseQueryParam} from "@/utils/utils";
+import {getColorWithStepAndIndex, getDepartmentAndNotesWithStepAndIndex, parseQueryParam} from "@/utils/utils";
 import useParameters from "@/hooks/useParameters";
 import ExcelImporter from "@/components/uploader/ExcelImporter";
 import {useState} from "react";
@@ -55,11 +55,15 @@ export default function Order() {
             title: "流程进度",
             key: "step_count",
             dataIndex: 'step_count',
+            width: "500px",
             render: (_, record) => (
                 <>
-                    {Object.entries(record.steps).map((sc, index)=> (
-                        <Tag color={'red'} key={index}>
-                            {sc[0]}: {sc[1]}
+                    {record.steps.map(stepIndexCount => (
+                        <Tag color={getColorWithStepAndIndex(stepIndexCount.step, stepIndexCount.index)}
+                             key={`${record.id}-${stepIndexCount.step}-${stepIndexCount.index}`}>
+                            <div className='text-black'>
+                                {getDepartmentAndNotesWithStepAndIndex(stepIndexCount.step, stepIndexCount.index)} {stepIndexCount.count}
+                            </div>
                         </Tag>
                     ))}
                 </>

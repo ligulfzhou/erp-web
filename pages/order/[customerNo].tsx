@@ -7,14 +7,24 @@ import {useRouter} from "next/router";
 import {getColorWithStepAndIndex, getDepartmentAndNotesWithStepAndIndex, parseQueryParam} from "@/utils/utils";
 import useParameters from "@/hooks/useParameters";
 import ExcelImporter from "@/components/uploader/ExcelImporter";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import OrderModal from "@/components/order/OrderModal";
+import useRouterUtils from "@/hooks/useRouterUtils";
 
 export default function Order() {
     const router = useRouter()
-    const {page, pageSize} = useParameters()
+    const {page, pageSize, order_id, order_no} = useParameters()
     let customerNo = parseQueryParam(router.query.customerNo)
     const {orders, total, isLoading, isValidating, key, mutate} = useOrders(customerNo)
     const [refresh, setRefresh] = useState<boolean>(false);
+    const [openOrderModal, setOpenOrderModal] = useState<boolean>(false)
+    const {reloadPage} = useRouterUtils()
+
+    useEffect(() => {
+        if (order_id || order_no) {
+            setOpenOrderModal(true)
+        }
+    }, [order_id, order_no]);
 
     const columns: ColumnsType<Order> = [
         {
@@ -70,12 +80,15 @@ export default function Order() {
         {
             title: '操作',
             key: 'action',
-            render: () => (
+            render: (_, record) => (
                 <Space size="middle">
                     <a href='#'
                        onClick={(event) => {
                            event.preventDefault()
-                           console.log("查看订单")
+                           reloadPage({
+                               order_no: record.order_no
+                           })
+                           setOpenOrderModal(true)
                        }}>
                         查看订单
                     </a>
@@ -93,6 +106,14 @@ export default function Order() {
 
     return (
         <LayoutWithMenu>
+            <OrderModal
+                open={openOrderModal}
+                closeFn={
+                    () => setOpenOrderModal(false)
+                }
+                orders={orders}
+            />
+
             <div className='text-black my-2 gap-2 flex flex-row'>
                 <Button
                     className='text-white'

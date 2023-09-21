@@ -7,12 +7,17 @@ export default function useParameters () {
     let {
         id,
         page,
-        pageSize
+        pageSize,
+        order_id,
+        order_no
     } = router.query
 
     let idN = parseQueryParamToNumber(id)
     let pageN = parseQueryParamToNumber(page)
     let pageSizeN = parseQueryParamToNumber(pageSize)
+
+    let order_idN = parseQueryParamToNumber(order_id)
+    order_no = parseQueryParam(order_no)
     if (pageN==0){
         pageN = 1
     }
@@ -23,6 +28,9 @@ export default function useParameters () {
     return {
         id: idN,
         page: pageN,
-        pageSize: pageSizeN
+        pageSize: pageSizeN,
+
+        order_id: order_idN,
+        order_no
     }
 }
