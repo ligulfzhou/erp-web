@@ -11,7 +11,8 @@ import useOrderDates from "@/hooks/useOrderDates";
 const columns: ColumnsType<DateWithOrders> = [
     {
         title: "日期",
-        dataIndex: "date"
+        dataIndex: "date",
+        width: "150px"
     },
     {
         title: "订单号",

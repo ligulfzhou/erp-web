@@ -72,6 +72,20 @@ export default function Order() {
             key: 'action',
             render: () => (
                 <Space size="middle">
+                    <a href='#'
+                       onClick={(event) => {
+                           event.preventDefault()
+                           console.log("查看订单")
+                       }}>
+                        查看订单
+                    </a>
+
+                    <a href='#' onClick={(event) => {
+                        event.preventDefault()
+                        console.log("查看订单商品")
+                    }}>
+                        查看订单商品
+                    </a>
                 </Space>
             ),
         },
