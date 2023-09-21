@@ -1,8 +1,5 @@
-
-import React, {FC, useState} from "react";
+import React, {FC} from "react";
 import {Order} from "@/types";
-import useParameters from "@/hooks/useParameters";
-
 
 interface Props {
     order: Order

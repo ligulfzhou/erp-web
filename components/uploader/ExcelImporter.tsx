@@ -6,10 +6,10 @@ import {host} from "@/utils/const";
 import {EmptyResponse} from "@/types";
 
 interface Props {
-    callback: ()=> void
+    callback: () => void
 }
 
-const ExcelImporter:FC<Props> = (
+const ExcelImporter: FC<Props> = (
     {
         callback
     }
