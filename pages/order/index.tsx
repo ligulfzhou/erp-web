@@ -90,8 +90,11 @@ export default function Order() {
                     type="primary">
                     刷新
                 </Button>
-
-                <ExcelImporter/>
+                <ExcelImporter callback={()=> {
+                    setRefresh(true)
+                    // @ts-ignore
+                    mutate(key).finally(() => setRefresh(false))
+                }}/>
             </div>
 
             <Table

@@ -1,28 +1,47 @@
 import {UploadOutlined} from '@ant-design/icons';
 import type {UploadProps} from 'antd';
 import {Button, message, Upload} from 'antd';
-import React from 'react';
+import React, {FC} from 'react';
 import {host} from "@/utils/const";
+import {EmptyResponse} from "@/types";
 
-const props: UploadProps = {
-    name: 'file',
-    multiple: false,
-    showUploadList: false,
-    action: `${host}/api/upload/excel`,
-    accept: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel",
-    onChange(info) {
-        if (info.file.status !== 'uploading') {
-            console.log(info.file, info.fileList);
-        }
-        if (info.file.status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully`);
-        } else if (info.file.status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
-        }
-    },
-};
+interface Props {
+    callback: ()=> void
+}
 
-const ExcelImporter = () => {
+const ExcelImporter:FC<Props> = (
+    {
+        callback
+    }
+) => {
+    const key = 'excel_importer';
+
+    const props: UploadProps = {
+        name: 'file',
+        multiple: false,
+        showUploadList: false,
+        action: `${host}/api/upload/excel`,
+        accept: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel",
+        onChange(info) {
+            if (info.file.status === 'uploading') {
+                message.loading({content: "正在上传excel..", key})
+                console.log(info.file, info.fileList);
+            }
+            if (info.file.status === 'done') {
+                console.log(info.file.response)
+                message.success({
+                    content: '导入成功', key
+                });
+                callback()
+            } else if (info.file.status === 'error') {
+                let res = info.file.response as EmptyResponse;
+                message.error({
+                    content: `导入失败: ${res.msg}`, key
+                });
+            }
+        },
+    };
+
     return (
         <>
             <Upload {...props}>
