@@ -8,7 +8,6 @@ import {parseQueryParam} from "@/utils/utils";
 import useParameters from "@/hooks/useParameters";
 import ExcelImporter from "@/components/uploader/ExcelImporter";
 import {useState} from "react";
-import useOrderDates from "@/hooks/useOrderDates";
 
 
 export default function Order() {
@@ -18,8 +17,6 @@ export default function Order() {
     const {orders, total, isLoading, isValidating, key, mutate} = useOrders(customerNo)
     const [refresh, setRefresh] = useState<boolean>(false);
 
-    const {dateWithOrders, total: dateTotal, isLoading: datesLoading} = useOrderDates(customerNo)
-
     const columns: ColumnsType<Order> = [
         {
             title: 'ID',
@@ -28,7 +25,7 @@ export default function Order() {
         {
             title: "订单编号",
             dataIndex: "order_no",
-            render: (text)=> (
+            render: (text) => (
                 <div className='font-medium'>
                     {text}
                 </div>
@@ -59,7 +56,7 @@ export default function Order() {
             dataIndex: 'step_count',
             render: (_, record) => (
                 <>
-                    {Object.entries(record.steps).map((sc, index)=> (
+                    {Object.entries(record.steps).map((sc, index) => (
                         <Tag color={'red'} key={index}>
                             {sc[0]}: {sc[1]}
                         </Tag>
@@ -79,17 +76,14 @@ export default function Order() {
 
     return (
         <LayoutWithMenu>
-            <div className='text-black my-2 gap-2 flex flex-row'>
+            <div className='my-2 gap-2 flex flex-row'>
                 <Button
-                    className='text-white'
-                    type={'primary'}
-                    style={{borderRadius: 8}}
                     onClick={() => {
                         setRefresh(true)
                         // @ts-ignore
                         mutate(key).finally(() => setRefresh(false))
                     }}
-                >
+                    type="primary">
                     刷新
                 </Button>
 

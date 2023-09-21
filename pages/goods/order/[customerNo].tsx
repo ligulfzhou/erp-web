@@ -45,7 +45,7 @@ export default function Order() {
         <LayoutWithMenu>
             <div style={{marginBottom: 16}}>
                 <Button type="primary">
-                    Reload
+                    刷新
                 </Button>
             </div>
 

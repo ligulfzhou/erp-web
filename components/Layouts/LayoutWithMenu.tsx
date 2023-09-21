@@ -1,5 +1,5 @@
 import React, {FC, ReactNode, useEffect, useState} from 'react';
-import {LaptopOutlined, UserOutlined} from '@ant-design/icons';
+import {DollarCircleOutlined, LaptopOutlined, LineChartOutlined, UserOutlined} from '@ant-design/icons';
 import {Layout, Menu, MenuProps} from 'antd';
 import {useRouter} from "next/router";
 import {useIsMounted} from "@/hooks/useIsMounted";
@@ -17,7 +17,7 @@ let customers = ["L1001", "L1002", "L1003", "L1004", "L1005", "L1006"]
 const items: MenuProps["items"] = [
     {
         key: "home",
-        icon: React.createElement(LaptopOutlined),
+        icon: React.createElement(LineChartOutlined),
         label: "统计",
         children: [
             {
@@ -28,12 +28,12 @@ const items: MenuProps["items"] = [
     },
     {
         key: 'order',
-        icon: React.createElement(LaptopOutlined),
+        icon: React.createElement(DollarCircleOutlined),
         label: "订单管理",
         children: [
             ...customers.map(customer => ({
                 "key": `/order/${customer}`,
-                "label": customer
+                "label": `${customer}客户`
             })),
             {
                 'key': '/order',
@@ -47,7 +47,7 @@ const items: MenuProps["items"] = [
         label: "订单商品",
         children: [...customers.map(customer => ({
             "key": `/goods/order/${customer}`,
-            "label": customer
+            "label": `${customer}客户`
         })), {
             'key': '/goods/order',
             'label': '所有客户'
@@ -107,7 +107,7 @@ const LayoutWithMenu: FC<Props> = ({
             <Layout>
                 <Sider
                     width={200}
-                    style={{background: ''}}
+                    style={{background: 'blue'}}
                     collapsible={true}
                 >
                     <Menu
@@ -122,16 +122,11 @@ const LayoutWithMenu: FC<Props> = ({
                         items={items}
                     />
                 </Sider>
-                <Layout style={{padding: '12px'}}>
-                    <Content
-                        style={{
-                            padding: 12,
-                            margin: 0,
-                            minHeight: 280,
-                            background: 'white',
-                        }}
-                    >
-                        {children}
+                <Layout>
+                    <Content>
+                        <div className='bg-white p-5 m-5 rounded'>
+                            {children}
+                        </div>
                     </Content>
                 </Layout>
             </Layout>
