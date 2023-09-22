@@ -21,13 +21,13 @@ const OrderModal: FC<Props> = (
     {
         open,
         closeFn,
-        // order,
+        order,
         orderNo
     }
 ) => {
     const {removeParams} = useRouterUtils();
 
-    const {order, isLoading} = useOrderDetail(orderNo)
+    // const {order, isLoading} = useOrderDetail(orderNo)
     const isEdit = !!order;
     const [form] = Form.useForm();
 
@@ -96,105 +96,99 @@ const OrderModal: FC<Props> = (
                 cancelText={"取消"}
                 confirmLoading={callingUpdateOrderAPI}
             >
-
-                {isLoading ? (
-                    <div className='flex flex-row justify-center'>
-                        <Spin/>
-                    </div>) : (
-                    <Form
-                        form={form}
-                        name="basic"
-                        layout={'horizontal'}
-                        initialValues={formValues}
-                        labelCol={{span: 6}}
-                        onFinish={onFinish}
+                <Form
+                    form={form}
+                    name="basic"
+                    layout={'horizontal'}
+                    initialValues={formValues}
+                    labelCol={{span: 6}}
+                    onFinish={onFinish}
+                >
+                    <Form.Item
+                        label="客户编号"
+                        name="customer_no"
+                        // initialValue={curOrder?.customer_no || ""}
+                        rules={[{required: true, message: '请输入客户编号!'}]}
                     >
-                        <Form.Item
-                            label="客户编号"
-                            name="customer_no"
-                            // initialValue={curOrder?.customer_no || ""}
-                            rules={[{required: true, message: '请输入客户编号!'}]}
-                        >
-                            <Select
-                                options={[
-                                    {
-                                        value: '',
-                                        label: '请选择',
-                                    },
-                                    {
-                                        value: 'L1001',
-                                        label: 'L1001',
-                                    },
-                                    {
-                                        value: 'L1002',
-                                        label: 'L1002',
-                                    },
-                                    {
-                                        value: 'L1003',
-                                        label: 'L1003',
-                                    },
-                                    {
-                                        value: 'L1004',
-                                        label: 'L1004',
-                                    },
-                                    {
-                                        value: 'L1005',
-                                        label: 'L1005',
-                                    },
-                                    {
-                                        value: 'L1006',
-                                        label: 'L1006',
-                                    },
-                                ]}
-                            />
-                        </Form.Item>
+                        <Select
+                            options={[
+                                {
+                                    value: '',
+                                    label: '请选择',
+                                },
+                                {
+                                    value: 'L1001',
+                                    label: 'L1001',
+                                },
+                                {
+                                    value: 'L1002',
+                                    label: 'L1002',
+                                },
+                                {
+                                    value: 'L1003',
+                                    label: 'L1003',
+                                },
+                                {
+                                    value: 'L1004',
+                                    label: 'L1004',
+                                },
+                                {
+                                    value: 'L1005',
+                                    label: 'L1005',
+                                },
+                                {
+                                    value: 'L1006',
+                                    label: 'L1006',
+                                },
+                            ]}
+                        />
+                    </Form.Item>
 
-                        <Form.Item
-                            label="订单编号"
-                            name="order_no"
-                            rules={[{required: true, message: '请输入订单编号!'}]}
-                        >
-                            <Input/>
-                        </Form.Item>
+                    <Form.Item
+                        label="订单编号"
+                        name="order_no"
+                        rules={[{required: true, message: '请输入订单编号!'}]}
+                    >
+                        <Input/>
+                    </Form.Item>
 
-                        <Form.Item
-                            label="下单时间"
-                            name="order_date"
-                            rules={[{required: true, message: '请选择下单时间!'}]}
-                        >
-                            <DatePicker/>
-                        </Form.Item>
+                    <Form.Item
+                        label="下单时间"
+                        name="order_date"
+                        rules={[{required: true, message: '请选择下单时间!'}]}
+                    >
+                        <DatePicker/>
+                    </Form.Item>
 
-                        <Form.Item
-                            label="交付时间"
-                            name="delivery_date"
-                        >
-                            <DatePicker/>
-                        </Form.Item>
+                    <Form.Item
+                        label="交付时间"
+                        name="delivery_date"
+                    >
+                        <DatePicker/>
+                    </Form.Item>
 
-                        <Form.Item
-                            label="返单"
-                            name="is_return_order"
-                            rules={[{required: true, message: '请选择是否返单!'}]}
-                        >
-                            <Radio.Group>
-                                <Radio value={true}>是</Radio>
-                                <Radio value={false}>否</Radio>
-                            </Radio.Group>
-                        </Form.Item>
+                    <Form.Item
+                        label="返单"
+                        name="is_return_order"
+                        rules={[{required: true, message: '请选择是否返单!'}]}
+                    >
+                        <Radio.Group>
+                            <Radio value={true}>是</Radio>
+                            <Radio value={false}>否</Radio>
+                        </Radio.Group>
+                    </Form.Item>
 
-                        <Form.Item
-                            label="加急单"
-                            name="is_urgent"
-                            rules={[{required: true, message: '请选择是否加急单!'}]}
-                        >
-                            <Radio.Group>
-                                <Radio value={true}>是</Radio>
-                                <Radio value={false}>否</Radio>
-                            </Radio.Group>
-                        </Form.Item>
-                    </Form>
-                )}
+                    <Form.Item
+                        label="加急单"
+                        name="is_urgent"
+                        rules={[{required: true, message: '请选择是否加急单!'}]}
+                    >
+                        <Radio.Group>
+                            <Radio value={true}>是</Radio>
+                            <Radio value={false}>否</Radio>
+                        </Radio.Group>
+                    </Form.Item>
+                </Form>
             </Modal>
         </div>
     )
