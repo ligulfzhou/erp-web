@@ -1,8 +1,10 @@
 import React, {FC, useEffect, useState} from "react";
-import {Modal, Form, Input, Select, DatePicker, Radio} from "antd";
+import {Modal, Form, Select, SelectProps, message} from "antd";
 import useRouterUtils from "@/hooks/useRouterUtils";
 import useSWRMutation from "swr/mutation";
 import {markProgress, MarkProgressParam} from "@/requests/order";
+import TextArea from "antd/es/input/TextArea";
+import {getOptionsForStep} from "@/utils/utils";
 
 export interface MarkProgressProps{
     open: boolean,
@@ -12,7 +14,7 @@ export interface MarkProgressProps{
     currentStep: number,
 }
 
-const OrderModal: FC<MarkProgressProps> = (
+const MarkProgressModal: FC<MarkProgressProps> = (
     {
         open,
         closeFn,
@@ -25,6 +27,8 @@ const OrderModal: FC<MarkProgressProps> = (
     const [form] = Form.useForm();
 
     const [formValues, setFormValues] = useState<MarkProgressParam | undefined>(undefined)
+    const [index, setIndex] = useState<number>(0)
+    const options: SelectProps['options'] = getOptionsForStep(currentStep)
 
     useEffect(() => {
         let _formValues: MarkProgressParam = {
@@ -35,7 +39,7 @@ const OrderModal: FC<MarkProgressProps> = (
         }
         setFormValues(_formValues)
         form.setFieldsValue(_formValues)
-    }, [order_goods_id, order_item_id, currentStep])
+    }, [order_goods_id, order_item_id])
 
     const {
         trigger: callMarkProgressAPI,
@@ -43,20 +47,25 @@ const OrderModal: FC<MarkProgressProps> = (
     } = useSWRMutation('/api/mark/progress', markProgress)
 
     const onFinish = (values: MarkProgressParam) => {
-
+        if (values['index']==0) {
+            message.error("请先选择正确的流程");
+            return
+        }
+        if (!values.notes) {
+            values.notes = ''
+        }
+        values['order_goods_id'] = order_goods_id
+        values['order_item_id'] = order_item_id
         callMarkProgressAPI(values).then((res)=> {
             console.log(res)
+            if (res.code==0) {
+                message.success("流程设置成功")
+                closeFn(true)
+                form.resetFields()
+            } else {
+                message.error(res.msg)
+            }
         })
-        // callUpdateOrderAPI(values).then((res) => {
-        //     if (res.code == 0) {
-        //         console.log(res)
-        //         message.success("修改成功")
-        //         closeFn(true)
-        //         form.resetFields()
-        //     } else {
-        //         message.error(res.msg)
-        //     }
-        // })
     };
 
     return (
@@ -87,93 +96,29 @@ const OrderModal: FC<MarkProgressProps> = (
                     onFinish={onFinish}
                 >
                     <Form.Item
-                        label="客户编号"
-                        name="customer_no"
-                        // initialValue={curOrder?.customer_no || ""}
-                        rules={[{required: true, message: '请输入客户编号!'}]}
-                    >
-                        <Select
-                            options={[
-                                {
-                                    value: '',
-                                    label: '请选择',
-                                },
-                                {
-                                    value: 'L1001',
-                                    label: 'L1001',
-                                },
-                                {
-                                    value: 'L1002',
-                                    label: 'L1002',
-                                },
-                                {
-                                    value: 'L1003',
-                                    label: 'L1003',
-                                },
-                                {
-                                    value: 'L1004',
-                                    label: 'L1004',
-                                },
-                                {
-                                    value: 'L1005',
-                                    label: 'L1005',
-                                },
-                                {
-                                    value: 'L1006',
-                                    label: 'L1006',
-                                },
-                            ]}
-                        />
-                    </Form.Item>
-
-                    <Form.Item
                         label="订单编号"
-                        name="order_no"
+                        name="index"
                         rules={[{required: true, message: '请输入订单编号!'}]}
                     >
-                        <Input/>
+                        <Select options={options} onChange={(value)=> {
+                            setIndex(value)
+                        }}>
+                        </Select>
                     </Form.Item>
 
-                    <Form.Item
-                        label="下单时间"
-                        name="order_date"
-                        rules={[{required: true, message: '请选择下单时间!'}]}
-                    >
-                        <DatePicker/>
-                    </Form.Item>
-
-                    <Form.Item
-                        label="交付时间"
-                        name="delivery_date"
-                    >
-                        <DatePicker/>
-                    </Form.Item>
-
-                    <Form.Item
-                        label="返单"
-                        name="is_return_order"
-                        rules={[{required: true, message: '请选择是否返单!'}]}
-                    >
-                        <Radio.Group>
-                            <Radio value={true}>是</Radio>
-                            <Radio value={false}>否</Radio>
-                        </Radio.Group>
-                    </Form.Item>
-
-                    <Form.Item
-                        label="加急单"
-                        name="is_urgent"
-                        rules={[{required: true, message: '请选择是否加急单!'}]}
-                    >
-                        <Radio.Group>
-                            <Radio value={true}>是</Radio>
-                            <Radio value={false}>否</Radio>
-                        </Radio.Group>
-                    </Form.Item>
+                    {index === 1 ? (
+                        <Form.Item
+                            label="备注"
+                            name="notes"
+                            rules={[{required: true, message: '请输入备注信息!'}]}
+                        >
+                            <TextArea placeholder={'备注信息'}/>
+                        </Form.Item>
+                    ): null}
                 </Form>
             </Modal>
         </div>
     )
 }
 
-export default OrderModal
+export default MarkProgressModal

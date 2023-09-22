@@ -162,7 +162,13 @@ const OrderGoodsDetailModal: FC<Props> = (
                 return (
                     <>
                         {record.is_next_action ? (
-                            <a href='#'>
+                            <a href='#' onClick={()=> {
+                                openMarkProgressModal({
+                                    order_goods_id: 0,
+                                    order_item_id: record.id,
+                                    currentStep: record.current_step
+                                })
+                            }}>
                                 标记流程
                             </a>
                         ) : null}
