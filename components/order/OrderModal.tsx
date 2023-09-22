@@ -1,11 +1,9 @@
 import React, {FC, useEffect, useState} from "react";
 import {Modal, Form, Input, Select, DatePicker, Radio, message, Spin} from "antd";
-import useParameters from "@/hooks/useParameters";
 import useRouterUtils from "@/hooks/useRouterUtils";
 import moment from "moment";
 import useSWRMutation from "swr/mutation";
 import {updateOrder, UpdateOrderParam} from "@/requests/order";
-import useOrderDetail from "@/hooks/useOrderDetail";
 import {Order} from "@/types";
 
 const dateFormat = 'YYYY-MM-DD';

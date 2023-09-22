@@ -1,89 +1,58 @@
-import React, {FC} from "react";
+import React, {FC, useEffect, useState} from "react";
+import {Modal, Form, Input, Select, DatePicker, Radio, message, Spin} from "antd";
+import useRouterUtils from "@/hooks/useRouterUtils";
+import moment from "moment";
 import useSWRMutation from "swr/mutation";
-import {Modal, Form, Button, Input, message} from "antd";
-import {addCustomer} from "@/requests";
+import {updateOrder, UpdateOrderParam} from "@/requests/order";
+import {Order} from "@/types";
+import useOrderGoodsItems from "@/hooks/useOrderGoodsItems";
 
+const dateFormat = 'YYYY-MM-DD';
 
 interface Props {
     open: boolean,
     closeFn: (success: boolean) => void,
+    order: Order | undefined,
+    orderNo: string,
 }
 
-const OrderModal: FC<Props> = (
+const OrderGoodsDetailModal: FC<Props> = (
     {
         open,
         closeFn,
+        order,
+        orderNo
     }
 ) => {
+
+    const {orderGoods, isError, isLoading,} = useOrderGoodsItems(0, orderNo)
+
+    if (isError) {
+        message.error(isError)
+    }
+
     const {
-        trigger: callAddCustomerAPI,
-        isMutating: callingAddCustomerAPI
-    } = useSWRMutation('/api/customers', addCustomer)
+        trigger: callUpdateOrderAPI,
+        isMutating: callingUpdateOrderAPI
+    } = useSWRMutation('/api/order/update', updateOrder)
 
-    const [form] = Form.useForm();
-
-    const onFinish = (values: any) => {
-        callAddCustomerAPI(values).then((res) => {
-            if (res.code == 0) {
-                console.log(res)
-                message.success("添加成功")
-            } else {
-                message.error(res.msg)
-            }
-        })
+    const onFinish = (values: UpdateOrderParam) => {
     };
 
     return (
-        <div>
-            <Modal
-                open={open}
-                title='添加客户'
-                onCancel={(e) => {
-                    e.preventDefault()
-                    form.resetFields()
-                    closeFn(false)
-                }}
-                closable={true}
-                footer={
-                    null
-                }
-            >
-                <Form
-                    form={form}
-                    name="basic"
-                    initialValues={{remember: true}}
-                    onFinish={onFinish}
-                >
-                    <Form.Item
-                        label="客户编号"
-                        name="customer_no"
-                        rules={[{required: true, message: '请输入客户编号!'}]}
-                    >
-                        <Input/>
-                    </Form.Item>
-
-                    <Form.Item
-                        label="备注"
-                        name="notes"
-                        rules={[{required: false, message: '请输入备注!'}]}
-                    >
-                        <Input/>
-                    </Form.Item>
-
-                    <Form.Item wrapperCol={{offset: 8, span: 16}}>
-                        <Button
-                            disabled={callingAddCustomerAPI}
-                            loading={callingAddCustomerAPI}
-                            type="primary"
-                            htmlType="submit"
-                        >
-                            添加
-                        </Button>
-                    </Form.Item>
-                </Form>
-            </Modal>
-        </div>
+        <Modal
+            width={'800px'}
+            open={open}
+            title={'订单商品'}
+            onCancel={(e) => {
+                closeFn(false)
+            }}
+            closable={true}
+            footer={null}
+        >
+        </Modal>
     )
 }
 
-export default OrderModal
+
+export default OrderGoodsDetailModal

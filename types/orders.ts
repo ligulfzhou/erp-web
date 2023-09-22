@@ -4,6 +4,20 @@ export interface StepIndexCount {
     index: number;
     count: number;
 }
+
+export interface OneProgress {
+    id: number,
+    order_item_id: number,
+    step: number,
+    index: number,
+    account_id: number,
+    account_name: string,
+    department: string,
+    done: boolean,
+    notes: string,
+    dt: string,
+}
+
 export interface Order {
     id: number,
     customer_no: string,
@@ -24,18 +38,31 @@ export interface OrderGoods {
     name: string,
     package_card: string,
     package_card_des: string
+
+    is_next_action: boolean,
+    current_step: number, // 如果 is_next_action=false，这里的值则没有意义
+    current_index: number,
+    steps: StepIndexCount[],
+    items: OrderItem[],
 }
 
 export interface OrderItem {
     id: number,
     order_goods_id: number,
     order_id: number,
-    sku_id: number
+    sku_id: number,
+    sku_no: string,
+    color: string,
     count: number,
     unit: string,
     unit_price: number | null,
     total_price: number | null
     notes: string | null
+
+    is_next_action: boolean,
+    current_step: number,
+    steps: OneProgress[],
+
 }
 
 export interface OrderPlainItemsModel {

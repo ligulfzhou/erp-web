@@ -10,6 +10,8 @@ import ExcelImporter from "@/components/uploader/ExcelImporter";
 import {useEffect, useRef, useState} from "react";
 import OrderModal from "@/components/order/OrderModal";
 import useRouterUtils from "@/hooks/useRouterUtils";
+import {record} from "zod";
+import OrderGoodsDetailModal from "@/components/order/OrderGoodsDetailModal";
 
 export default function Order() {
     const router = useRouter()
@@ -17,7 +19,6 @@ export default function Order() {
     let customerNo = parseQueryParam(router.query.customerNo)
     const {orders, total, isLoading, isValidating, key, mutate} = useOrders(customerNo)
     const [refresh, setRefresh] = useState<boolean>(false);
-    const [openOrderModal, setOpenOrderModal] = useState<boolean>(false)
     const {reloadPage} = useRouterUtils()
 
     const [order, setOrder] = useState<Order | undefined>();
@@ -90,17 +91,20 @@ export default function Order() {
                         href='#'
                         onClick={(event) => {
                             event.preventDefault()
-                            showModal(record)
+                            showOrderModal(record)
                         }}>
                         查看订单
                     </a>
 
                     <a
                         key={`${record.id}-items`}
-                        href='#' onClick={(event) => {
-                        event.preventDefault()
-                        console.log("查看订单商品")
-                    }}>
+                        href='#'
+                        onClick={
+                            (event) => {
+                                event.preventDefault()
+                                showOrderGoodsModal(record)
+                            }
+                        }>
                         查看订单商品
                     </a>
                 </Space>
@@ -108,9 +112,17 @@ export default function Order() {
         },
     ];
 
-    const showModal = (record: Order) => {
+    const [openOrderModal, setOpenOrderModal] = useState<boolean>(false)
+    const showOrderModal = (record: Order) => {
         console.log(`set order: ${record}, ${record.order_no}`)
         setOpenOrderModal(true)
+        setOrder(record)
+        setOrderNo(record.order_no)
+    }
+
+    const [openOrderGoodsModal, setOpenOrderGoodsModal] = useState<boolean>(false)
+    const showOrderGoodsModal = (record: Order) => {
+        setOpenOrderGoodsModal(true)
         setOrder(record)
         setOrderNo(record.order_no)
     }
@@ -124,11 +136,17 @@ export default function Order() {
                     if (success) {
                         setRefresh(true)
                         // @ts-ignore
-                        mutate(key).finally(()=> setRefresh(false))
+                        mutate(key).finally(() => setRefresh(false))
                     }
                 }}
                 order={order}
                 orderNo={orderNo}
+            />
+
+            <OrderGoodsDetailModal
+                open={openOrderGoodsModal}
+                closeFn={() => setOpenOrderGoodsModal(false)}
+                order={order} orderNo={orderNo}
             />
 
             <div className='text-black my-2 gap-2 flex flex-row'>
