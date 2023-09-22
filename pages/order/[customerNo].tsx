@@ -7,10 +7,9 @@ import {useRouter} from "next/router";
 import {getColorWithStepAndIndex, getDepartmentAndNotesWithStepAndIndex, parseQueryParam} from "@/utils/utils";
 import useParameters from "@/hooks/useParameters";
 import ExcelImporter from "@/components/uploader/ExcelImporter";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import OrderModal from "@/components/order/OrderModal";
 import useRouterUtils from "@/hooks/useRouterUtils";
-import {record} from "zod";
 import OrderGoodsDetailModal from "@/components/order/OrderGoodsDetailModal";
 
 export default function Order() {

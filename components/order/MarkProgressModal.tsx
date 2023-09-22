@@ -1,11 +1,11 @@
 import React, {FC, useEffect, useState} from "react";
-import {Modal, Form, Select, SelectProps, message} from "antd";
+import {Modal, Form, Select, SelectProps, message, Input} from "antd";
 import useRouterUtils from "@/hooks/useRouterUtils";
 import useSWRMutation from "swr/mutation";
 import {markProgress, MarkProgressParam} from "@/requests/order";
-import TextArea from "antd/es/input/TextArea";
 import {getOptionsForStep} from "@/utils/utils";
 
+const {TextArea} = Input;
 export interface MarkProgressProps{
     open: boolean,
     closeFn: (success: boolean) => void,
