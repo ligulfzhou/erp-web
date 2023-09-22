@@ -1,10 +1,11 @@
 import React, {FC, useEffect, useState} from "react";
-import {Modal, Form, Input, Select, DatePicker, Radio, message, Spin, Table, Image, Tag} from "antd";
-import {Order, OrderGoods} from "@/types";
+import {Modal, Form, Input, Select, DatePicker, Radio, message, Spin, Table, Image, Tag, TableColumnsType} from "antd";
+import {Order, OrderGoods, OrderItem} from "@/types";
 import useOrderGoodsItems from "@/hooks/useOrderGoodsItems";
 import {ColumnsType} from "antd/es/table";
 import useParameters from "@/hooks/useParameters";
 import {getColorWithStepAndIndex, getDepartmentAndNotesWithStepAndIndex} from "@/utils/utils";
+import useRouterUtils from "@/hooks/useRouterUtils";
 
 const dateFormat = 'YYYY-MM-DD';
 
@@ -79,6 +80,47 @@ const columns: ColumnsType<OrderGoods> = [
         width: "140px",
     },
 ]
+
+
+const expandableColumns: TableColumnsType<OrderItem> = [
+    {
+        title: "sku_no",
+        dataIndex: "sku_no",
+    },
+    {
+        title: "颜色",
+        dataIndex: "color",
+        width: "120px",
+    },
+    {
+        title: "数量",
+        dataIndex: "count",
+        width: "120px",
+    },
+    {
+        title: "单位",
+        dataIndex: "unit",
+    },
+    {
+        title: "单价",
+        dataIndex: "unit_price",
+    },
+    {
+        title: "总价",
+        dataIndex: "total_price",
+    },
+    {
+        title: "流程进度",
+        dataIndex: "steps",
+    },
+    {
+        title: "操作",
+        dataIndex: "action",
+        width: "140px",
+    },
+]
+
+
 const OrderGoodsDetailModal: FC<Props> = (
     {
         open,
@@ -90,22 +132,14 @@ const OrderGoodsDetailModal: FC<Props> = (
 
     const {page, pageSize} = useParameters();
     const {orderGoods, isError, isLoading, total} = useOrderGoodsItems(0, orderNo)
+    const {reloadPage} = useRouterUtils();
 
     if (isError) {
         message.error(isError)
     }
 
-    // const {
-    //     trigger: callUpdateOrderAPI,
-    //     isMutating: callingUpdateOrderAPI
-    // } = useSWRMutation('/api/order/update', updateOrder)
-
-    // const onFinish = (values: UpdateOrderParam) => {
-    // };
-
     return (
         <Modal
-            // className='w-6/7'
             width={'1250px'}
             open={open}
             title={'订单商品'}
@@ -115,15 +149,21 @@ const OrderGoodsDetailModal: FC<Props> = (
             closable={true}
             footer={null}
         >
-
             <Table
                 className='mx-1 overflow-auto'
                 size={"middle"}
                 loading={isLoading}
+                bordered={true}
                 // loading={isLoading || (refresh && isValidating)}
                 columns={columns}
                 pagination={{total: total, current: page, pageSize: pageSize}}
                 dataSource={orderGoods}
+                onChange={(pagination, filters, sorter) => {
+                    reloadPage({
+                        page: pagination.current,
+                        pageSize: pagination.pageSize,
+                    })
+                }}
             />
         </Modal>
     )

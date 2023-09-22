@@ -66,7 +66,7 @@ export default function Order() {
             title: "流程进度",
             key: "step_count",
             dataIndex: 'step_count',
-            width: "500px",
+            width: "300px",
             render: (_, record) => (
                 <>
                     {record.steps.map(stepIndexCount => (
