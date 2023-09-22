@@ -1,5 +1,5 @@
-import React, {FC, useEffect, useState} from "react";
-import {Modal, Form, Input, Select, DatePicker, Radio, message, Spin, Table, Image, Tag, TableColumnsType} from "antd";
+import React, {FC} from "react";
+import {Modal, message, Table, Image, Tag, TableColumnsType} from "antd";
 import {Order, OrderGoods, OrderItem} from "@/types";
 import useOrderGoodsItems from "@/hooks/useOrderGoodsItems";
 import {ColumnsType} from "antd/es/table";
@@ -11,8 +11,6 @@ import {
     getNotesForOneProgress
 } from "@/utils/utils";
 import useRouterUtils from "@/hooks/useRouterUtils";
-
-const dateFormat = 'YYYY-MM-DD';
 
 interface Props {
     open: boolean,
@@ -82,7 +80,17 @@ const columns: ColumnsType<OrderGoods> = [
     {
         title: "操作",
         dataIndex: "action",
-        width: "140px",
+        render: (_, record) => {
+            return (
+                <>
+                    {record.is_next_action ? (
+                        <a href='#'>
+                            标记流程
+                        </a>
+                    ) : null}
+                </>
+            )
+        }
     },
 ]
 
@@ -123,8 +131,9 @@ const expandableColumns: TableColumnsType<OrderItem> = [
                     {record.steps.map(step => (
                         <div
                             key={`${step.id}`}
-                            className=''>
-                            {formatDateTime(new Date(step.dt))}: {step.account_name}({ step.department }): { getNotesForOneProgress(step) }
+                            className=''
+                        >
+                            {formatDateTime(new Date(step.dt))}: {step.account_name}({step.department}): {getNotesForOneProgress(step)}
                         </div>
                     ))}
                 </>
@@ -181,7 +190,7 @@ const OrderGoodsDetailModal: FC<Props> = (
                 expandable={{
                     // expandRowByClick: true,
                     columnTitle: "查看SKU",
-                    expandedRowRender: ((record, index,indent, expanded) => (
+                    expandedRowRender: ((record, index, indent, expanded) => (
                         <div className='p-2'>
                             <Table
                                 rowKey={`${record.id}`}
