@@ -1,5 +1,7 @@
 import {maxTableColumnStrLen, progresses} from '@/utils/const'
-import {DetailedStep} from "@/types/progress";
+import { format } from "date-fns";
+import {customAlphabet} from "nanoid";
+import {OneProgress} from "@/types";
 
 export function containsOnlyNumbers(str: string) {
     return /^\d+$/.test(str);
@@ -35,7 +37,20 @@ export function getOptionsForStep(n: number){
     return []
 }
 
-export const getNotesForOneProgress = (oneProgress: DetailedStep)=>  {
+export function formatDate(date: number | Date) {
+    return format(date, "yyyy-MM-dd");
+}
+
+export function formatDateTime(date: number | Date) {
+    return format(date, "yyyy-MM-dd HH:mm:ss");
+}
+
+const nanoid = customAlphabet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 10);
+
+export function generateKey(): string {
+    return nanoid();
+}
+export const getNotesForOneProgress = (oneProgress: OneProgress)=>  {
     return getNotesWithStepAndIndex(oneProgress.step, oneProgress.index, oneProgress.notes)
 }
 
