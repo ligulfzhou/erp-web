@@ -14,6 +14,7 @@ import useRouterUtils from "@/hooks/useRouterUtils";
 import {MarkProgressParam} from "@/requests/order";
 import {record} from "zod";
 import MarkProgressModal, {MarkProgressProps} from "@/components/order/MarkProgressModal";
+import {useSWRConfig} from "swr";
 
 interface Props {
     open: boolean,
@@ -179,8 +180,9 @@ const OrderGoodsDetailModal: FC<Props> = (
     ]
 
     const {page, pageSize} = useParameters();
-    const {orderGoods, isError, isLoading, total} = useOrderGoodsItems(0, orderNo)
+    const {orderGoods, isError, isLoading, total, key} = useOrderGoodsItems(0, orderNo)
     const {reloadPage} = useRouterUtils();
+    const { mutate } = useSWRConfig()
 
     const [orderGoodsId, setOrderGoodsId] = useState<number>(0)
     const [orderItemId, setOrderItemId] = useState<number>(0)
@@ -216,7 +218,12 @@ const OrderGoodsDetailModal: FC<Props> = (
         >
             <MarkProgressModal
                 open={isOpenMarkProgressModal}
-                closeFn={() => setIsOpenMarkProgressModal(false)}
+                closeFn={(success) => {
+                    setIsOpenMarkProgressModal(false)
+                    if (success) {
+                        mutate(key).finally();
+                    }
+                }}
                 order_goods_id={orderGoodsId}
                 order_item_id={orderItemId}
                 currentStep={currentStep}

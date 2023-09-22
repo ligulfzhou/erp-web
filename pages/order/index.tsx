@@ -8,14 +8,16 @@ import {getColorWithStepAndIndex, getDepartmentAndNotesWithStepAndIndex, parseQu
 import useParameters from "@/hooks/useParameters";
 import ExcelImporter from "@/components/uploader/ExcelImporter";
 import {useState} from "react";
+import {useSWRConfig} from "swr";
 
 
 export default function Order() {
     const router = useRouter()
     const {page, pageSize} = useParameters()
     let customerNo = parseQueryParam(router.query.customerNo)
-    const {orders, total, isLoading, isValidating, key, mutate} = useOrders(customerNo)
+    const {orders, total, isLoading, isValidating, key} = useOrders(customerNo)
     const [refresh, setRefresh] = useState<boolean>(false);
+    const {mutate} = useSWRConfig()
 
     const columns: ColumnsType<Order> = [
         {
@@ -84,7 +86,6 @@ export default function Order() {
                 <Button
                     onClick={() => {
                         setRefresh(true)
-                        // @ts-ignore
                         mutate(key).finally(() => setRefresh(false))
                     }}
                     type="primary">
@@ -92,7 +93,6 @@ export default function Order() {
                 </Button>
                 <ExcelImporter callback={()=> {
                     setRefresh(true)
-                    // @ts-ignore
                     mutate(key).finally(() => setRefresh(false))
                 }}/>
             </div>
