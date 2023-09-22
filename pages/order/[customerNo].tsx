@@ -176,6 +176,12 @@ export default function Order() {
                 columns={columns}
                 pagination={{total: total, current: page, pageSize: pageSize}}
                 dataSource={orders}
+                onChange={(pagination, filters, sorter) => {
+                    reloadPage({
+                        page: pagination.current,
+                        pageSize: pagination.pageSize,
+                    })
+                }}
             />
         </LayoutWithMenu>
     );
