@@ -140,7 +140,8 @@ const OrderGoodsDetailModal: FC<Props> = (
 
     return (
         <Modal
-            width={'1250px'}
+            className='rounded-xl'
+            width={'1500px'}
             open={open}
             title={'订单商品'}
             onCancel={(e) => {
@@ -150,6 +151,7 @@ const OrderGoodsDetailModal: FC<Props> = (
             footer={null}
         >
             <Table
+                rowKey={'id'}
                 className='mx-1 overflow-auto'
                 size={"middle"}
                 loading={isLoading}
@@ -158,6 +160,21 @@ const OrderGoodsDetailModal: FC<Props> = (
                 columns={columns}
                 pagination={{total: total, current: page, pageSize: pageSize}}
                 dataSource={orderGoods}
+                expandable={{
+                    expandRowByClick: true,
+                    columnTitle: "查看SKU",
+                    expandedRowRender: ((record, index,indent, expanded) => (
+                        <div className='p-2'>
+                            <Table
+                                rowKey={`${record.id}`}
+                                bordered={true}
+                                pagination={false}
+                                dataSource={record.items}
+                                columns={expandableColumns}
+                            />
+                        </div>
+                    ))
+                }}
                 onChange={(pagination, filters, sorter) => {
                     reloadPage({
                         page: pagination.current,
