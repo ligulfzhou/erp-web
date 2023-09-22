@@ -1,69 +1,62 @@
 import React, {FC, useEffect, useState} from "react";
-import {Modal, Form, Input, Select, DatePicker, Radio, message, Spin} from "antd";
+import {Modal, Form, Input, Select, DatePicker, Radio} from "antd";
 import useRouterUtils from "@/hooks/useRouterUtils";
-import moment from "moment";
 import useSWRMutation from "swr/mutation";
-import {updateOrder, UpdateOrderParam} from "@/requests/order";
-import {Order} from "@/types";
+import {markProgress, MarkProgressParam} from "@/requests/order";
 
-interface Props {
+export interface MarkProgressProps{
     open: boolean,
     closeFn: (success: boolean) => void,
-    order: Order | undefined,
-    orderNo: string,
+    order_goods_id: number,
+    order_item_id: number,
+    currentStep: number,
 }
 
-const OrderModal: FC<Props> = (
+const OrderModal: FC<MarkProgressProps> = (
     {
         open,
         closeFn,
-        order,
-        orderNo
+        order_goods_id,
+        order_item_id,
+        currentStep,
     }
 ) => {
     const {removeParams} = useRouterUtils();
-
-    // const {order, isLoading} = useOrderDetail(orderNo)
-    const isEdit = !!order;
     const [form] = Form.useForm();
 
-    const [formValues, setFormValues] = useState<UpdateOrderParam | undefined>(undefined)
+    const [formValues, setFormValues] = useState<MarkProgressParam | undefined>(undefined)
 
     useEffect(() => {
-        let _formValues: UpdateOrderParam = {
-            id: 0,
-            customer_no: order?.customer_no ? order.customer_no : '',
-            order_no: order?.order_no ? order.order_no : '',
-            order_date: order?.order_date ? moment(order.order_date) : undefined,
-            delivery_date: order?.delivery_date ? moment(order.delivery_date) : undefined,
-            is_return_order: order?.is_return_order ? order.is_return_order : false,
-            is_urgent: order?.is_urgent ? order.is_urgent : false
+        let _formValues: MarkProgressParam = {
+            order_item_id: order_item_id,
+            order_goods_id: order_goods_id,
+            index: 0,
+            notes: '',
         }
         setFormValues(_formValues)
         form.setFieldsValue(_formValues)
-    }, [order])
+    }, [order_goods_id, order_item_id, currentStep])
 
     const {
-        trigger: callUpdateOrderAPI,
-        isMutating: callingUpdateOrderAPI
-    } = useSWRMutation('/api/order/update', updateOrder)
+        trigger: callMarkProgressAPI,
+        isMutating: callingMarkProgressAPI
+    } = useSWRMutation('/api/mark/progress', markProgress)
 
-    const onFinish = (values: UpdateOrderParam) => {
-        if (!order?.id) {
-            return
-        }
+    const onFinish = (values: MarkProgressParam) => {
 
-        values["id"] = order.id
-        callUpdateOrderAPI(values).then((res) => {
-            if (res.code == 0) {
-                console.log(res)
-                message.success("修改成功")
-                closeFn(true)
-                form.resetFields()
-            } else {
-                message.error(res.msg)
-            }
+        callMarkProgressAPI(values).then((res)=> {
+            console.log(res)
         })
+        // callUpdateOrderAPI(values).then((res) => {
+        //     if (res.code == 0) {
+        //         console.log(res)
+        //         message.success("修改成功")
+        //         closeFn(true)
+        //         form.resetFields()
+        //     } else {
+        //         message.error(res.msg)
+        //     }
+        // })
     };
 
     return (
@@ -71,7 +64,7 @@ const OrderModal: FC<Props> = (
             <Modal
                 width={'400px'}
                 open={open}
-                title={`${isEdit ? "编辑" : "添加"}订单`}
+                title={`标记流程`}
                 onCancel={(e) => {
                     form.resetFields()
                     removeParams(['order_id', 'order_no'])
@@ -83,7 +76,7 @@ const OrderModal: FC<Props> = (
                 }}
                 okText={"确定"}
                 cancelText={"取消"}
-                confirmLoading={callingUpdateOrderAPI}
+                confirmLoading={callingMarkProgressAPI}
             >
                 <Form
                     form={form}
