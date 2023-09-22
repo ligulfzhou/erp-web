@@ -54,7 +54,6 @@ const AddCustomerModal: FC<Props> = (
                     form={form}
                     name="basic"
                     labelCol={{span: 6}}
-                    initialValues={{remember: true}}
                     onFinish={onFinish}
                 >
                     <Form.Item

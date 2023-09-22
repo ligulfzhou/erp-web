@@ -7,7 +7,7 @@ import {useRouter} from "next/router";
 import {getColorWithStepAndIndex, getDepartmentAndNotesWithStepAndIndex, parseQueryParam} from "@/utils/utils";
 import useParameters from "@/hooks/useParameters";
 import ExcelImporter from "@/components/uploader/ExcelImporter";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import OrderModal from "@/components/order/OrderModal";
 import useRouterUtils from "@/hooks/useRouterUtils";
 
@@ -20,6 +20,8 @@ export default function Order() {
     const [openOrderModal, setOpenOrderModal] = useState<boolean>(false)
     const {reloadPage} = useRouterUtils()
 
+    const [order, setOrder] = useState<Order | undefined>();
+    const [orderNo, setOrderNo] = useState<string>('');
     useEffect(() => {
         if (order_id || order_no) {
             setOpenOrderModal(true)
@@ -54,8 +56,8 @@ export default function Order() {
             dataIndex: 'return_order_or_urgent',
             render: (_, record) => (
                 <>
-                    {record.is_return_order ? <Tag color='red'>返单</Tag> : null}
-                    {record.is_urgent ? <Tag className='yellow'>加急单</Tag> : null}
+                    {record.is_return_order ? <Tag color='red' key={`${record.id}-return`}>返单</Tag> : null}
+                    {record.is_urgent ? <Tag className='yellow' key={`${record.id}-urgent`}>加急单</Tag> : null}
                 </>
             )
         },
@@ -67,8 +69,9 @@ export default function Order() {
             render: (_, record) => (
                 <>
                     {record.steps.map(stepIndexCount => (
-                        <Tag color={getColorWithStepAndIndex(stepIndexCount.step, stepIndexCount.index)}
-                             key={`${record.id}-${stepIndexCount.step}-${stepIndexCount.index}`}>
+                        <Tag
+                            color={getColorWithStepAndIndex(stepIndexCount.step, stepIndexCount.index)}
+                            key={`${record.id}-${stepIndexCount.step}-${stepIndexCount.index}`}>
                             <div className='text-black'>
                                 {getDepartmentAndNotesWithStepAndIndex(stepIndexCount.step, stepIndexCount.index)} {stepIndexCount.count}
                             </div>
@@ -82,18 +85,19 @@ export default function Order() {
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <a href='#'
-                       onClick={(event) => {
-                           event.preventDefault()
-                           reloadPage({
-                               order_no: record.order_no
-                           })
-                           setOpenOrderModal(true)
-                       }}>
+                    <a
+                        key={`${record.id}-detail`}
+                        href='#'
+                        onClick={(event) => {
+                            event.preventDefault()
+                            showModal(record)
+                        }}>
                         查看订单
                     </a>
 
-                    <a href='#' onClick={(event) => {
+                    <a
+                        key={`${record.id}-items`}
+                        href='#' onClick={(event) => {
                         event.preventDefault()
                         console.log("查看订单商品")
                     }}>
@@ -104,14 +108,27 @@ export default function Order() {
         },
     ];
 
+    const showModal = (record: Order) => {
+        console.log(`set order: ${record}, ${record.order_no}`)
+        setOpenOrderModal(true)
+        setOrder(record)
+        setOrderNo(record.order_no)
+    }
+
     return (
         <LayoutWithMenu>
             <OrderModal
                 open={openOrderModal}
-                closeFn={
-                    () => setOpenOrderModal(false)
-                }
-                orders={orders}
+                closeFn={(success) => {
+                    setOpenOrderModal(false)
+                    if (success) {
+                        setRefresh(true)
+                        // @ts-ignore
+                        mutate(key).finally(()=> setRefresh(false))
+                    }
+                }}
+                order={order}
+                orderNo={orderNo}
             />
 
             <div className='text-black my-2 gap-2 flex flex-row'>
@@ -128,10 +145,10 @@ export default function Order() {
                     刷新
                 </Button>
 
-                <ExcelImporter callback={()=> {
+                <ExcelImporter callback={() => {
                     setRefresh(true)
                     // @ts-ignore
-                    mutate(key).finally(()=> setRefresh(false))
+                    mutate(key).finally(() => setRefresh(false))
                 }}/>
             </div>
 
