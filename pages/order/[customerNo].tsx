@@ -44,11 +44,15 @@ export default function Order() {
         },
         {
             title: "下单时间",
-            dataIndex: "order_date"
+            dataIndex: "order_date",
+            // defaultSortOrder: 'descend',
+            sorter: (a, b) => a.order_date - b.order_date,
         },
         {
             title: "交付时间",
-            dataIndex: "delivery_date"
+            dataIndex: "delivery_date",
+            // defaultSortOrder: 'descend',
+            sorter: (a, b) => a.order_date - b.order_date,
         },
         {
             title: "返单/加急",
@@ -176,10 +180,16 @@ export default function Order() {
                 pagination={{total: total, current: page, pageSize: pageSize}}
                 dataSource={orders}
                 onChange={(pagination, filters, sorter) => {
-                    reloadPage({
+                    console.log(sorter)
+                    let obj = {
                         page: pagination.current,
                         pageSize: pagination.pageSize,
-                    })
+                    }
+                    if (sorter) {
+
+                        // obj['sorter_field'] = sorter
+                    }
+                    reloadPage(obj)
                 }}
             />
         </LayoutWithMenu>

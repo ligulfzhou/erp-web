@@ -1,15 +1,15 @@
 import '@/styles/globals.css'
 import 'antd/dist/antd.css'
-// import 'antd/dist/reset.css';
-// import 'antd/dist/antd-with-locales.min';
 import type {AppProps} from 'next/app'
-// import 'antd/dist/reset.css'
-// import {ConfigProvider} from 'antd';
-// import theme from "@/theme/themeConfig";
+import { ConfigProvider } from 'antd';
+import zhCN from 'antd/lib/locale/zh_CN'
+
 
 export default function App({Component, pageProps}: AppProps) {
     return (
-        <Component {...pageProps} />
+        <ConfigProvider locale={zhCN}>
+            <Component {...pageProps} />
+        </ConfigProvider>
     )
 }
 
