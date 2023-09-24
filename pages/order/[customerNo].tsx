@@ -357,7 +357,7 @@ export default function Order() {
                     rowKey={"id"}
                     size={"small"}
                     bordered={true}
-                    loading={isLoading || refresh || isValidating}
+                    loading={isLoading || refresh}
                     columns={columns}
                     pagination={{total: total, current: page, pageSize: pageSize}}
                     dataSource={orders}
