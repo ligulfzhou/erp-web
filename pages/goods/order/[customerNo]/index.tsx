@@ -19,9 +19,7 @@ export default function Order() {
     const {key, dateWithOrders, total, isLoading} = useOrderDates(customerNo)
     const {reloadPage} = useRouterUtils()
     const [refresh, setRefresh] = useState<boolean>()
-
     const {mutate} = useSWRConfig()
-
     const columns: ColumnsType<DateWithOrders> = [
         {
             title: "日期",
@@ -50,7 +48,6 @@ export default function Order() {
             )
         },
     ];
-
 
     return (
         <LayoutWithMenu>
