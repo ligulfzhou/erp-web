@@ -252,10 +252,8 @@ export default function Order() {
                     loading={refresh}
                     type={'primary'}
                     onClick={() => {
-                        console.log("refresh....")
                         setRefresh(true)
                         mutate(key).finally(() => setRefresh(false))
-                        // mutate(key)
                     }}
                 >
                     刷新
