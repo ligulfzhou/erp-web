@@ -8,14 +8,19 @@ import useParameters from "@/hooks/useParameters";
 import useOrderDates from "@/hooks/useOrderDates";
 import useRouterUtils from "@/hooks/useRouterUtils";
 import {b64Encode} from "@/utils/b64";
+import {useState} from "react";
+import {useSWRConfig} from "swr";
 
 
 export default function Order() {
     const router = useRouter()
     const {page, pageSize} = useParameters()
     let customerNo = parseQueryParam(router.query.customerNo)
-    const {dateWithOrders, total, isLoading} = useOrderDates(customerNo)
+    const {key, dateWithOrders, total, isLoading} = useOrderDates(customerNo)
     const {reloadPage} = useRouterUtils()
+    const [refresh, setRefresh] = useState<boolean>()
+
+    const {mutate} = useSWRConfig()
 
     const columns: ColumnsType<DateWithOrders> = [
         {
@@ -50,7 +55,14 @@ export default function Order() {
     return (
         <LayoutWithMenu>
             <div className='m-2 p-5 bg-white rounded'>
-                <Button type="primary">
+                <Button
+                    loading={refresh}
+                    type="primary"
+                    onClick={()=> {
+                        setRefresh(true)
+                        mutate(key).finally(()=> setRefresh(false))
+                    }}
+                >
                     刷新
                 </Button>
             </div>
@@ -59,7 +71,7 @@ export default function Order() {
                 <Table
                     bordered={true}
                     size={"small"}
-                    loading={isLoading}
+                    loading={isLoading || refresh}
                     columns={columns}
                     pagination={{total: total, current: page, pageSize: pageSize}}
                     dataSource={dateWithOrders}
