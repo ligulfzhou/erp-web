@@ -11,9 +11,9 @@ import React, {useEffect, useState} from "react";
 import OrderModal from "@/components/order/OrderModal";
 import useRouterUtils from "@/hooks/useRouterUtils";
 import OrderGoodsDetailModal from "@/components/order/OrderGoodsDetailModal";
-import {mutate} from "swr";
 import moment from "moment";
 import {dateFormat} from "@/utils/const";
+import {useSWRConfig} from "swr";
 
 const {RangePicker} = DatePicker;
 
@@ -24,7 +24,8 @@ export default function Order() {
         order_no, order_date_start, order_date_end, delivery_date_start, delivery_date_end, is_return_order, is_urgent
     } = useParameters()
     let customerNo = parseQueryParam(router.query.customerNo)
-    const {orders, total, isLoading, isValidating, key, mutate: mutateData} = useOrders(customerNo)
+    const {orders, total, isLoading, isValidating, key} = useOrders(customerNo)
+    console.log(key)
     const [refresh, setRefresh] = useState<boolean>(false);
     const {reloadPage, removeParams} = useRouterUtils()
 
@@ -161,7 +162,6 @@ export default function Order() {
             ),
         },
     ];
-
     const [openOrderModal, setOpenOrderModal] = useState<boolean>(false)
     const showOrderModal = (record: Order) => {
         console.log(`set order: ${record}, ${record.order_no}`)
@@ -177,7 +177,8 @@ export default function Order() {
         setOrderNo(record.order_no)
     }
     const [form] = Form.useForm();
-    const formValues = {}
+    const {mutate} = useSWRConfig()
+    // const formValues = {}
 
     const searchOrders = () => {
         const formParams: {
@@ -212,7 +213,7 @@ export default function Order() {
 
         reloadPage(params)
     }
-    const reset = ()=>{
+    const reset = () => {
         let obj: OrderSearchParms = {
             delivery_date_end: "",
             delivery_date_start: "",
@@ -225,6 +226,7 @@ export default function Order() {
         removeParams(Object.keys(obj))
         form.resetFields()
     }
+
 
     return (
         <LayoutWithMenu>
@@ -250,12 +252,10 @@ export default function Order() {
             <div className='p-5 m-2 bg-white rounded text-black gap-2 flex flex-row'>
                 <Button
                     loading={refresh}
-                    className='text-white'
                     type={'primary'}
-                    style={{borderRadius: 8}}
                     onClick={() => {
+                        console.log("refresh....")
                         setRefresh(true)
-                        // @ts-ignore
                         mutate(key).finally(() => setRefresh(false))
                     }}
                 >
@@ -264,7 +264,6 @@ export default function Order() {
 
                 <ExcelImporter callback={() => {
                     setRefresh(true)
-                    // @ts-ignore
                     mutate(key).finally(() => setRefresh(false))
                 }}/>
             </div>
@@ -276,54 +275,56 @@ export default function Order() {
                     name="basic"
                     layout={'horizontal'}
                     // initialValues={formValues}
-                    labelCol={{span: 5}}
+                    // labelCol={{span: 5}}
                     // onFinish={onSearch}
                 >
-                    <Row gutter={24}>
-                        <Col span={6}>
+                    <div className='flex flex-row justify-around flex-wrap items-start'>
+                        <div className='w-72'>
                             <Form.Item
                                 label="订单编号"
                                 name="order_no"
                             >
                                 <Input placeholder={'订单编号'}/>
                             </Form.Item>
-                        </Col>
+                        </div>
 
-                        <Col span={6}>
+                        <div className='w-72'>
                             <Form.Item
                                 label="下单时间"
                                 name="order_date"
                             >
                                 <RangePicker/>
                             </Form.Item>
-                        </Col>
+                        </div>
 
-                        <Col span={6}>
+                        <div className='w-72'>
                             <Form.Item
                                 label="交付时间"
                                 name="delivery_date"
                             >
                                 <RangePicker/>
                             </Form.Item>
-                        </Col>
-                        <Col span={3}>
-                            <Form.Item
-                                label="返单"
-                                name="is_return_order"
-                                valuePropName='checked'
-                            >
-                                <Checkbox/>
-                            </Form.Item>
-                        </Col>
-                        <Col span={3}>
-                            <Form.Item
-                                label="加急"
-                                name="is_urgent"
-                                valuePropName='checked'
-                            >
-                                <Checkbox/>
-                            </Form.Item>
-                        </Col>
+                        </div>
+                        <div className='w-72 flex flex-row gap-2'>
+                            <div className='w-32'>
+                                <Form.Item
+                                    label="返单"
+                                    name="is_return_order"
+                                    valuePropName='checked'
+                                >
+                                    <Checkbox/>
+                                </Form.Item>
+                            </div>
+                            <div className='w-32'>
+                                <Form.Item
+                                    label="加急"
+                                    name="is_urgent"
+                                    valuePropName='checked'
+                                >
+                                    <Checkbox/>
+                                </Form.Item>
+                            </div>
+                        </div>
                         <Col span={6}>
                             <Form.Item>
                                 <div className='flex flex-row justify-center gap-2'>
@@ -346,7 +347,9 @@ export default function Order() {
                                 </div>
                             </Form.Item>
                         </Col>
-                    </Row>
+                    </div>
+
+                    {/*</Row>*/}
                 </Form>
             </div>
 
@@ -355,7 +358,7 @@ export default function Order() {
                     rowKey={"id"}
                     size={"small"}
                     bordered={true}
-                    loading={isLoading || (refresh && isValidating)}
+                    loading={isLoading || refresh || isValidating}
                     columns={columns}
                     pagination={{total: total, current: page, pageSize: pageSize}}
                     dataSource={orders}

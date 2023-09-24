@@ -84,6 +84,7 @@ export default function Order() {
         <LayoutWithMenu>
             <div className='my-2 gap-2 flex flex-row'>
                 <Button
+                    loading={refresh}
                     onClick={() => {
                         setRefresh(true)
                         mutate(key).finally(() => setRefresh(false))
