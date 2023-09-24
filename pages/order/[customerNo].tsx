@@ -243,6 +243,7 @@ export default function Order() {
                 <Table
                     rowKey={"id"}
                     size={"small"}
+                    bordered={true}
                     loading={isLoading || (refresh && isValidating)}
                     columns={columns}
                     pagination={{total: total, current: page, pageSize: pageSize}}

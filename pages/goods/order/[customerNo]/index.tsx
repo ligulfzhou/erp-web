@@ -57,6 +57,7 @@ export default function Order() {
 
             <div className='m-2 p-5 bg-white rounded'>
                 <Table
+                    bordered={true}
                     size={"small"}
                     loading={isLoading}
                     columns={columns}
