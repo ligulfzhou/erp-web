@@ -35,6 +35,12 @@ export default function useParameters () {
     if (pageSizeN==0) {
         pageSizeN = defaultPageSize
     }
+    if (mpageN==0){
+        mpageN = 1
+    }
+    if (mpageSizeN==0) {
+        mpageSizeN = defaultPageSize
+    }
 
     return {
         id: idN,
