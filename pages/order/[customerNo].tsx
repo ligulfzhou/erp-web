@@ -34,6 +34,7 @@ export default function Order() {
         {
             title: 'ID',
             dataIndex: 'id',
+            sorter: (a, b)=> a.id - b.id
         },
         {
             title: "订单编号",

@@ -6,9 +6,9 @@ import {ListReponse} from "@/types/common";
 import {OrderGoods} from "@/types/orders";
 
 export default function useOrderGoodsItems(order_id: number=0, order_no: String='') {
-    const {page, pageSize} = useParameters()
+    const {mpage, mpageSize} = useParameters()
 
-    const key = `${host}/api/order/items?page=${page}&pageSize=${pageSize}&order_no=${order_no}&order_id=${order_id}`
+    const key = `${host}/api/order/items?page=${mpage}&pageSize=${mpageSize}&order_no=${order_no}&order_id=${order_id}`
     const {data, error} = useSWR<ListReponse<OrderGoods>>(
         key, fetcher
     )

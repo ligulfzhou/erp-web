@@ -177,7 +177,7 @@ const OrderGoodsDetailModal: FC<Props> = (
         },
     ]
 
-    const {page, pageSize} = useParameters();
+    const {mpage, mpageSize} = useParameters();
     const {orderGoods, isError, isLoading, total, key} = useOrderGoodsItems(0, orderNo)
     const {reloadPage} = useRouterUtils();
     const { mutate } = useSWRConfig()
@@ -235,7 +235,7 @@ const OrderGoodsDetailModal: FC<Props> = (
                 bordered={true}
                 // loading={isLoading || (refresh && isValidating)}
                 columns={columns}
-                pagination={{total: total, current: page, pageSize: pageSize}}
+                pagination={{total: total, current: mpage, pageSize: mpageSize}}
                 dataSource={orderGoods}
                 expandable={{
                     // expandRowByClick: true,
@@ -255,8 +255,8 @@ const OrderGoodsDetailModal: FC<Props> = (
                 }}
                 onChange={(pagination, filters, sorter) => {
                     reloadPage({
-                        page: pagination.current,
-                        pageSize: pagination.pageSize,
+                        mpage: pagination.current,
+                        mpageSize: pagination.pageSize,
                     })
                 }}
             />

@@ -8,7 +8,7 @@ import useParameters from "@/hooks/useParameters";
 import {defaultPageSize} from "@/utils/const";
 import AddCustomer from "@/components/customer/AddCustomer";
 import {useState} from "react";
-import {mutate} from "swr"
+import {useSWRConfig} from "swr"
 
 
 const columns: ColumnsType<Customer> = [
@@ -40,6 +40,9 @@ export default function Order() {
     const {customers, total, isLoading, isError, key} = useCustomers()
     const [addCustomer, setAddCustomer] = useState<boolean>(false)
     const {reloadPage} = useRouterUtils()
+    const {mutate} = useSWRConfig()
+
+    const [refresh, setRefresh] = useState<boolean>(false)
     return (
         <LayoutWithMenu>
             <AddCustomer
@@ -47,13 +50,15 @@ export default function Order() {
                 closeFn={(success) => {
                     setAddCustomer(false)
                     if (success) {
-                        mutate(key)
+                        setRefresh(true)
+                        mutate(key).finally(()=> setRefresh(false))
                     }
                 }}
             />
 
             <div className='p-5 m-2 bg-white rounded'>
                 <Button
+                    loading={refresh}
                     type="primary"
                     onClick={() => {
                         setAddCustomer(true)
@@ -64,6 +69,9 @@ export default function Order() {
             </div>
 
             <div className='p-5 m-2 bg-white rounded'>
+                <div>
+
+                </div>
                 <Table
                     size={"small"}
                     loading={isLoading}
