@@ -98,7 +98,7 @@ export default function Order() {
             </div>
 
             <Table
-                size={"middle"}
+                size={"small"}
                 loading={isLoading || (refresh && isValidating)}
                 columns={columns}
                 pagination={{total: total, current: page, pageSize: pageSize}}

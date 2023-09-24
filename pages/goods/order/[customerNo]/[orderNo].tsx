@@ -106,6 +106,7 @@ export default function Order() {
 
             <div className='p-5 m-2 bg-white rounded'>
                 <Table
+                    size={"small"}
                     className='mx-1'
                     loading={isLoading}
                     columns={columns}

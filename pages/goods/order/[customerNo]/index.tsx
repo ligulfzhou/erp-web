@@ -8,7 +8,6 @@ import useParameters from "@/hooks/useParameters";
 import useOrderDates from "@/hooks/useOrderDates";
 
 
-
 export default function Order() {
     const router = useRouter()
     const {page, pageSize} = useParameters()
@@ -47,18 +46,21 @@ export default function Order() {
 
     return (
         <LayoutWithMenu>
-            <div style={{marginBottom: 16}}>
+            <div className='m-2 p-5 bg-white rounded'>
                 <Button type="primary">
                     刷新
                 </Button>
             </div>
 
-            <Table
-                loading={isLoading}
-                columns={columns}
-                pagination={{total: total, current: page, pageSize: pageSize}}
-                dataSource={dateWithOrders}
-            />
+            <div className='m-2 p-5 bg-white rounded'>
+                <Table
+                    size={"small"}
+                    loading={isLoading}
+                    columns={columns}
+                    pagination={{total: total, current: page, pageSize: pageSize}}
+                    dataSource={dateWithOrders}
+                />
+            </div>
         </LayoutWithMenu>
     );
 };

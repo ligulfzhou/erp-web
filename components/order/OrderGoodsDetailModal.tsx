@@ -230,7 +230,7 @@ const OrderGoodsDetailModal: FC<Props> = (
             <Table
                 rowKey={'id'}
                 className='mx-1 overflow-auto'
-                size={"middle"}
+                size={"small"}
                 loading={isLoading}
                 bordered={true}
                 // loading={isLoading || (refresh && isValidating)}
@@ -243,6 +243,7 @@ const OrderGoodsDetailModal: FC<Props> = (
                     expandedRowRender: ((record, index, indent, expanded) => (
                         <div className='p-2'>
                             <Table
+                                size={"small"}
                                 rowKey={`${record.id}`}
                                 bordered={true}
                                 pagination={false}

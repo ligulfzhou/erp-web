@@ -242,7 +242,7 @@ export default function Order() {
             <div className='bg-white p-5 m-2 rounded'>
                 <Table
                     rowKey={"id"}
-                    size={"middle"}
+                    size={"small"}
                     loading={isLoading || (refresh && isValidating)}
                     columns={columns}
                     pagination={{total: total, current: page, pageSize: pageSize}}
