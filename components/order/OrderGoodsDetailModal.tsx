@@ -12,7 +12,7 @@ import {
 } from "@/utils/utils";
 import useRouterUtils from "@/hooks/useRouterUtils";
 import MarkProgressModal from "@/components/order/MarkProgressModal";
-import {useSWRConfig} from "swr";
+import {mutate} from "swr";
 
 interface Props {
     open: boolean,
@@ -179,8 +179,7 @@ const OrderGoodsDetailModal: FC<Props> = (
 
     const {mpage, mpageSize} = useParameters();
     const {orderGoods, isError, isLoading, total, key} = useOrderGoodsItems(0, orderNo)
-    const {reloadPage} = useRouterUtils();
-    const { mutate } = useSWRConfig()
+    const {reloadPage, removeParams} = useRouterUtils();
 
     const [orderGoodsId, setOrderGoodsId] = useState<number>(0)
     const [orderItemId, setOrderItemId] = useState<number>(0)
