@@ -302,7 +302,7 @@ export default function Order() {
                                 <RangePicker/>
                             </Form.Item>
                         </div>
-                        <div className='w-72 flex flex-row gap-2'>
+                        <div className='w-72 flex flex-row items-center gap-2 justify-center'>
                             <div className='w-32'>
                                 <Form.Item
                                     label="返单"
@@ -350,7 +350,7 @@ export default function Order() {
                 </Form>
             </div>
 
-            <div className='bg-white p-5 m-2 rounded'>
+            <div className='bg-white p-5 m-2 rounded overflow-auto'>
                 <Table
                     rowKey={"id"}
                     size={"small"}

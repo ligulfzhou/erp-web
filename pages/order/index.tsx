@@ -82,7 +82,7 @@ export default function Order() {
 
     return (
         <LayoutWithMenu>
-            <div className='my-2 gap-2 flex flex-row'>
+            <div className='p-5 m-2 bg-white rounded  flex flex-row'>
                 <Button
                     loading={refresh}
                     onClick={() => {
@@ -98,13 +98,15 @@ export default function Order() {
                 }}/>
             </div>
 
-            <Table
-                size={"small"}
-                loading={isLoading || (refresh && isValidating)}
-                columns={columns}
-                pagination={{total: total, current: page, pageSize: pageSize}}
-                dataSource={orders}
-            />
+            <div className='p-5 m-2 bg-white rounded overflow-auto'>
+                <Table
+                    size={"small"}
+                    loading={isLoading || (refresh && isValidating)}
+                    columns={columns}
+                    pagination={{total: total, current: page, pageSize: pageSize}}
+                    dataSource={orders}
+                />
+            </div>
         </LayoutWithMenu>
     );
 

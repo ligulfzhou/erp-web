@@ -64,7 +64,7 @@ export default function Order() {
                 </Button>
             </div>
 
-            <div className='m-2 p-5 bg-white rounded'>
+            <div className='m-2 p-5 bg-white rounded overflow-auto'>
                 <Table
                     bordered={true}
                     size={"small"}

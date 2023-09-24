@@ -109,7 +109,7 @@ export default function Order() {
                 </a>
             </div>
 
-            <div className='p-5 m-2 bg-white rounded'>
+            <div className='p-5 m-2 bg-white rounded overflow-auto'>
                 <Table
                     bordered={true}
                     size={"small"}
