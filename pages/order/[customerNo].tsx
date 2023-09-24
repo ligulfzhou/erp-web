@@ -1,4 +1,4 @@
-import {Table, Space, Button, Tag} from 'antd';
+import {Table, Space, Button, Tag, Form, Input, DatePicker, Radio, Row, Col} from 'antd';
 import LayoutWithMenu from "@/components/Layouts/LayoutWithMenu";
 import {ColumnsType} from "antd/es/table";
 import useOrders from "@/hooks/useOrders";
@@ -7,10 +7,12 @@ import {useRouter} from "next/router";
 import {getColorWithStepAndIndex, getDepartmentAndNotesWithStepAndIndex, parseQueryParam} from "@/utils/utils";
 import useParameters from "@/hooks/useParameters";
 import ExcelImporter from "@/components/uploader/ExcelImporter";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import OrderModal from "@/components/order/OrderModal";
 import useRouterUtils from "@/hooks/useRouterUtils";
 import OrderGoodsDetailModal from "@/components/order/OrderGoodsDetailModal";
+
+const {RangePicker} = DatePicker;
 
 export default function Order() {
     const router = useRouter()
@@ -36,7 +38,7 @@ export default function Order() {
         {
             title: "订单编号",
             dataIndex: "order_no",
-            sorter: (a, b)=> a.order_no.localeCompare(b.order_no),
+            sorter: (a, b) => a.order_no.localeCompare(b.order_no),
             render: (text) => (
                 <div className='font-medium'>
                     {text}
@@ -130,7 +132,12 @@ export default function Order() {
         setOrder(record)
         setOrderNo(record.order_no)
     }
+    const [form] = Form.useForm();
 
+    const formValues = {}
+    const onSearch = () => {
+
+    }
     return (
         <LayoutWithMenu>
             <OrderModal
@@ -153,8 +160,9 @@ export default function Order() {
                 order={order} orderNo={orderNo}
             />
 
-            <div className='text-black my-2 gap-2 flex flex-row'>
+            <div className='p-5 m-2 bg-white rounded text-black gap-2 flex flex-row'>
                 <Button
+                    loading={refresh}
                     className='text-white'
                     type={'primary'}
                     style={{borderRadius: 8}}
@@ -174,27 +182,96 @@ export default function Order() {
                 }}/>
             </div>
 
-            <Table
-                rowKey={"id"}
-                size={"middle"}
-                loading={isLoading || (refresh && isValidating)}
-                columns={columns}
-                pagination={{total: total, current: page, pageSize: pageSize}}
-                dataSource={orders}
-                onChange={(pagination, filters, sorter) => {
-                    var obj = {
-                        page: pagination.current,
-                        pageSize: pagination.pageSize,
-                        sorter_field: '',
-                        sorter_order: '',
-                    }
-                    if (!Array.isArray(sorter)) {
-                        obj['sorter_field'] = sorter.field as string || ''
-                        obj['sorter_order'] = sorter.order as string || ''
-                    }
-                    reloadPage(obj)
-                }}
-            />
+            {/*filters*/}
+            <div className='bg-white p-5 m-2 rounded'>
+                <Form
+                    form={form}
+                    name="basic"
+                    layout={'horizontal'}
+                    initialValues={formValues}
+                    labelCol={{span: 6}}
+                    onFinish={onSearch}
+                >
+                    <Row gutter={24}>
+                        <Col span={6}>
+                            <Form.Item
+                                label="订单编号"
+                                name="order_no"
+                            >
+                                <Input/>
+                            </Form.Item>
+                        </Col>
+
+                        <Col span={6}>
+                            <Form.Item
+                                label="下单时间"
+                                name="order_date"
+                            >
+                                <RangePicker/>
+                            </Form.Item>
+                        </Col>
+
+                        <Col span={6}>
+                            <Form.Item
+                                label="交付时间"
+                                name="delivery_date"
+                            >
+                                <RangePicker/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item
+                                label="返单"
+                                name="is_return_order"
+                                rules={[{required: true, message: '请选择是否返单!'}]}
+                            >
+                                <Radio.Group>
+                                    <Radio value={true}>是</Radio>
+                                    <Radio value={false}>否</Radio>
+                                </Radio.Group>
+                            </Form.Item>
+                        </Col>
+
+                        <Col span={6}>
+                            <Form.Item
+                                label="加急单"
+                                name="is_urgent"
+                                rules={[{required: true, message: '请选择是否加急单!'}]}
+                            >
+                                <Radio.Group>
+                                    <Radio value={true}>是</Radio>
+                                    <Radio value={false}>否</Radio>
+                                </Radio.Group>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                </Form>
+            </div>
+
+            <div className='bg-white p-5 m-2 rounded'>
+                <Table
+                    rowKey={"id"}
+                    size={"middle"}
+                    loading={isLoading || (refresh && isValidating)}
+                    columns={columns}
+                    pagination={{total: total, current: page, pageSize: pageSize}}
+                    dataSource={orders}
+                    onChange={(pagination, filters, sorter) => {
+                        var obj = {
+                            page: pagination.current,
+                            pageSize: pagination.pageSize,
+                            sorter_field: '',
+                            sorter_order: '',
+                        }
+                        if (!Array.isArray(sorter)) {
+                            obj['sorter_field'] = sorter.field as string || ''
+                            obj['sorter_order'] = sorter.order as string || ''
+                        }
+                        reloadPage(obj)
+                    }}
+                />
+            </div>
+
         </LayoutWithMenu>
     );
 

@@ -8,7 +8,7 @@ import useParameters from "@/hooks/useParameters";
 import {defaultPageSize} from "@/utils/const";
 import AddCustomer from "@/components/customer/AddCustomer";
 import {useState} from "react";
-import { mutate } from "swr"
+import {mutate} from "swr"
 
 
 const columns: ColumnsType<Customer> = [
@@ -44,7 +44,7 @@ export default function Order() {
         <LayoutWithMenu>
             <AddCustomer
                 open={addCustomer}
-                closeFn={(success)=> {
+                closeFn={(success) => {
                     setAddCustomer(false)
                     if (success) {
                         mutate(key)
@@ -52,10 +52,10 @@ export default function Order() {
                 }}
             />
 
-            <div style={{marginBottom: 16}}>
+            <div className='p-5 m-2 bg-white rounded'>
                 <Button
                     type="primary"
-                    onClick={()=> {
+                    onClick={() => {
                         setAddCustomer(true)
                     }}
                 >
@@ -63,24 +63,26 @@ export default function Order() {
                 </Button>
             </div>
 
-            <Table
-                size={"small"}
-                loading={isLoading}
-                columns={columns}
-                pagination={{
-                    total: total,
-                    current: page,
-                    defaultPageSize: defaultPageSize,
-                    pageSize: pageSize,
-                    onChange: (thisPage, thisPageSize) => {
-                        reloadPage({
-                            page: thisPage,
-                            pageSize: thisPageSize
-                        })
-                    }
-                }}
-                dataSource={customers}
-            />
+            <div className='p-5 m-2 bg-white rounded'>
+                <Table
+                    size={"small"}
+                    loading={isLoading}
+                    columns={columns}
+                    pagination={{
+                        total: total,
+                        current: page,
+                        defaultPageSize: defaultPageSize,
+                        pageSize: pageSize,
+                        onChange: (thisPage, thisPageSize) => {
+                            reloadPage({
+                                page: thisPage,
+                                pageSize: thisPageSize
+                            })
+                        }
+                    }}
+                    dataSource={customers}
+                />
+            </div>
         </LayoutWithMenu>
     );
 };

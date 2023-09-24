@@ -91,7 +91,7 @@ export default function Order() {
     const {reloadPage}= useRouterUtils();
     return (
         <LayoutWithMenu>
-            <div className='mt-2'>
+            <div className='m-2 p-5 bg-white rounded'>
                 <a
                     className='mr-2'
                     href='#'
@@ -104,7 +104,7 @@ export default function Order() {
                 </a>
             </div>
 
-            <div>
+            <div className='p-5 m-2 bg-white rounded'>
                 <Table
                     className='mx-1'
                     loading={isLoading}

@@ -125,7 +125,7 @@ const LayoutWithMenu: FC<Props> = ({
                 </Sider>
                 <Layout>
                     <Content className='overflow-auto'>
-                        <div className='bg-white p-5 m-5 rounded overflow-y-auto'>
+                        <div className=' rounded overflow-y-auto'>
                             {children}
                         </div>
                     </Content>
