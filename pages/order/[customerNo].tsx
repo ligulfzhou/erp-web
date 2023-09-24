@@ -19,7 +19,10 @@ const {RangePicker} = DatePicker;
 
 export default function Order() {
     const router = useRouter()
-    const {page, pageSize, order_id, order_no} = useParameters()
+    const {
+        page, pageSize,
+        order_no, order_date_start, order_date_end, delivery_date_start, delivery_date_end, is_return_order, is_urgent
+    } = useParameters()
     let customerNo = parseQueryParam(router.query.customerNo)
     const {orders, total, isLoading, isValidating, key, mutate: mutateData} = useOrders(customerNo)
     const [refresh, setRefresh] = useState<boolean>(false);
@@ -30,14 +33,45 @@ export default function Order() {
 
     useEffect(() => {
         // 用户切换tab时，清掉form
-        form.resetFields()
-    }, [customerNo]);
+        let values = {}
+        if (order_no) {
+            // @ts-ignore
+            values['order_no'] = order_no
+        } else {
+            // @ts-ignore
+            values['order_no'] = undefined
+        }
+        if (order_date_start && order_date_end) {
+            // @ts-ignore
+            values['order_date'] = [moment(order_date_start, dateFormat), moment(order_date_end, dateFormat)]
+        } else {
+            // @ts-ignore
+            values['order_date'] = undefined
+        }
+        if (delivery_date_start && delivery_date_end) {
+            // @ts-ignore
+            values['delivery_date'] = [moment(delivery_date_start, dateFormat), moment(delivery_date_end, dateFormat)]
+        } else {
+            // @ts-ignore
+            values['delivery_date'] = undefined
+        }
+        if (is_urgent) {
+            // @ts-ignore
+            values['is_urgent'] = true
+        } else {
+            // @ts-ignore
+            values['is_urgent'] = undefined
+        }
+        if (is_return_order) {
+            // @ts-ignore
+            values['is_return_order'] = true
+        } else {
+            // @ts-ignore
+            values['is_return_order'] = undefined
+        }
 
-    // useEffect(() => {
-    //     if (order_id || order_no) {
-    //         setOpenOrderModal(true)
-    //     }
-    // }, [order_id, order_no]);
+        form.setFieldsValue(values)
+    }, [customerNo]);
 
     const columns: ColumnsType<Order> = [
         {
@@ -143,11 +177,55 @@ export default function Order() {
         setOrderNo(record.order_no)
     }
     const [form] = Form.useForm();
-
     const formValues = {}
-    const onSearch = () => {
-        console.log('on search...')
+
+    const searchOrders = () => {
+        const formParams: {
+            order_no: string | undefined,
+            is_return_order: boolean | undefined,
+            is_urgent: boolean | undefined,
+            order_date: moment.Moment[] | undefined,
+            delivery_date: moment.Moment[] | undefined
+        } = form.getFieldsValue();
+        let order_date_start: string | undefined = undefined;
+        let order_date_end: string | undefined = undefined;
+        if (formParams.order_date && formParams.order_date.length == 2) {
+            order_date_start = formParams.order_date[0].format(dateFormat)
+            order_date_end = formParams.order_date[1].format(dateFormat)
+        }
+
+        let delivery_date_start: string | undefined = undefined;
+        let delivery_date_end: string | undefined = undefined;
+        if (formParams.delivery_date && formParams.delivery_date.length == 2) {
+            delivery_date_start = formParams.delivery_date[0].format(dateFormat)
+            delivery_date_end = formParams.delivery_date[1].format(dateFormat)
+        }
+        let params: OrderSearchParms = {
+            delivery_date_end,
+            delivery_date_start,
+            order_date_end,
+            order_date_start,
+            is_return_order: formParams['is_return_order'],
+            is_urgent: formParams['is_urgent'],
+            order_no: formParams['order_no']
+        }
+
+        reloadPage(params)
     }
+    const reset = ()=>{
+        let obj: OrderSearchParms = {
+            delivery_date_end: "",
+            delivery_date_start: "",
+            is_return_order: false,
+            is_urgent: false,
+            order_date_end: "",
+            order_date_start: "",
+            order_no: ""
+        }
+        removeParams(Object.keys(obj))
+        form.resetFields()
+    }
+
     return (
         <LayoutWithMenu>
             <OrderModal
@@ -197,7 +275,7 @@ export default function Order() {
                     form={form}
                     name="basic"
                     layout={'horizontal'}
-                    initialValues={formValues}
+                    // initialValues={formValues}
                     labelCol={{span: 5}}
                     // onFinish={onSearch}
                 >
@@ -232,6 +310,7 @@ export default function Order() {
                             <Form.Item
                                 label="返单"
                                 name="is_return_order"
+                                valuePropName='checked'
                             >
                                 <Checkbox/>
                             </Form.Item>
@@ -240,6 +319,7 @@ export default function Order() {
                             <Form.Item
                                 label="加急"
                                 name="is_urgent"
+                                valuePropName='checked'
                             >
                                 <Checkbox/>
                             </Form.Item>
@@ -251,37 +331,7 @@ export default function Order() {
                                             onClick={(event) => {
                                                 console.log(form.getFieldsValue())
                                                 event.preventDefault()
-                                                const formParams: {
-                                                    order_no: string|undefined,
-                                                    is_return_order: boolean|undefined,
-                                                    is_urgent: boolean|undefined,
-                                                    order_date: moment.Moment[]|undefined,
-                                                    delivery_date: moment.Moment[]|undefined
-                                                } = form.getFieldsValue();
-                                                let order_date_start: string|undefined = undefined;
-                                                let order_date_end: string|undefined = undefined;
-                                                if (formParams.order_date && formParams.order_date.length==2) {
-                                                    order_date_start = formParams.order_date[0].format(dateFormat)
-                                                    order_date_end = formParams.order_date[1].format(dateFormat)
-                                                }
-
-                                                let delivery_date_start: string|undefined = undefined;
-                                                let delivery_date_end: string|undefined = undefined;
-                                                if (formParams.delivery_date && formParams.delivery_date.length==2) {
-                                                    delivery_date_start = formParams.delivery_date[0].format(dateFormat)
-                                                    delivery_date_end = formParams.delivery_date[1].format(dateFormat)
-                                                }
-                                                let params: OrderSearchParms = {
-                                                    delivery_date_end,
-                                                    delivery_date_start,
-                                                    order_date_end,
-                                                    order_date_start,
-                                                    is_return_order: formParams['is_return_order'],
-                                                    is_urgent: formParams['is_urgent'],
-                                                    order_no: formParams['order_no']
-                                                }
-
-                                                reloadPage(params)
+                                                searchOrders()
                                             }}>
                                         搜索
                                     </Button>
@@ -289,17 +339,7 @@ export default function Order() {
                                     <Button
                                         htmlType="submit"
                                         onClick={() => {
-                                            let obj: OrderSearchParms = {
-                                                delivery_date_end: "",
-                                                delivery_date_start: "",
-                                                is_return_order: false,
-                                                is_urgent: false,
-                                                order_date_end: "",
-                                                order_date_start: "",
-                                                order_no: ""
-                                            }
-                                            removeParams(Object.keys(obj))
-                                            form.resetFields()
+                                            reset()
                                         }}>
                                         重置
                                     </Button>
