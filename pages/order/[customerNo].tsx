@@ -1,4 +1,4 @@
-import {Table, Space, Button, Tag, Form, Input, DatePicker, Radio, Row, Col} from 'antd';
+import {Table, Space, Button, Tag, Form, Input, DatePicker, Radio, Row, Col, Checkbox} from 'antd';
 import LayoutWithMenu from "@/components/Layouts/LayoutWithMenu";
 import {ColumnsType} from "antd/es/table";
 import useOrders from "@/hooks/useOrders";
@@ -189,7 +189,7 @@ export default function Order() {
                     name="basic"
                     layout={'horizontal'}
                     initialValues={formValues}
-                    labelCol={{span: 6}}
+                    labelCol={{span: 5}}
                     onFinish={onSearch}
                 >
                     <Row gutter={24}>
@@ -198,7 +198,7 @@ export default function Order() {
                                 label="订单编号"
                                 name="order_no"
                             >
-                                <Input/>
+                                <Input placeholder={'订单编号'}/>
                             </Form.Item>
                         </Col>
 
@@ -219,29 +219,20 @@ export default function Order() {
                                 <RangePicker/>
                             </Form.Item>
                         </Col>
-                        <Col span={6}>
+                        <Col span={3}>
                             <Form.Item
                                 label="返单"
                                 name="is_return_order"
-                                rules={[{required: true, message: '请选择是否返单!'}]}
                             >
-                                <Radio.Group>
-                                    <Radio value={true}>是</Radio>
-                                    <Radio value={false}>否</Radio>
-                                </Radio.Group>
+                                <Checkbox/>
                             </Form.Item>
                         </Col>
-
-                        <Col span={6}>
+                        <Col span={3}>
                             <Form.Item
-                                label="加急单"
+                                label="加急"
                                 name="is_urgent"
-                                rules={[{required: true, message: '请选择是否加急单!'}]}
                             >
-                                <Radio.Group>
-                                    <Radio value={true}>是</Radio>
-                                    <Radio value={false}>否</Radio>
-                                </Radio.Group>
+                                <Checkbox/>
                             </Form.Item>
                         </Col>
                     </Row>

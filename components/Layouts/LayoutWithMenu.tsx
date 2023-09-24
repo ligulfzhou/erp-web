@@ -1,8 +1,9 @@
 import React, {FC, ReactNode, useEffect, useState} from 'react';
 import {DollarCircleOutlined, LaptopOutlined, LineChartOutlined, UserOutlined} from '@ant-design/icons';
-import {Layout, Menu, MenuProps} from 'antd';
+import {Avatar, Layout, Menu, MenuProps} from 'antd';
 import {useRouter} from "next/router";
 import {useIsMounted} from "@/hooks/useIsMounted";
+import useAccountInfo from "@/hooks/useAccountInfo";
 
 const {
     Header,
@@ -74,6 +75,8 @@ interface Props {
 const LayoutWithMenu: FC<Props> = ({
                                        children
                                    }) => {
+
+    const {account, code, isLoading} = useAccountInfo()
     const router = useRouter()
     const {pathname, push} = router;
     const [openedKey, setOpenedKey] = useState<string>('')
@@ -97,11 +100,12 @@ const LayoutWithMenu: FC<Props> = ({
 
     return (
         <Layout className='h-screen'>
-            <Header
-                style={{display: 'flex', alignItems: 'center', height: "3rem"}}
-            >
+            <Header className='flex flex-row justify-between h-3'>
                 <div className="demo-logo font-bold text-white">
                     lien后台管理
+                </div>
+                <div>
+                    <Avatar icon={<UserOutlined />} />
                 </div>
             </Header>
             <Layout>

@@ -13,12 +13,14 @@ export default function useAccountInfo () {
     )
 
     let account: Account | undefined= undefined
+    let code: number = 0
     if (data !== undefined && data.data !== undefined) {
         account = data.data
+        code = data.code
     }
 
     return {
-        key,
+        code,
         account,
         isLoading: !error && !data,
         isError: error
