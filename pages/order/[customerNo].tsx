@@ -36,6 +36,7 @@ export default function Order() {
         {
             title: "订单编号",
             dataIndex: "order_no",
+            sorter: (a, b)=> a.order_no.localeCompare(b.order_no),
             render: (text) => (
                 <div className='font-medium'>
                     {text}
@@ -181,14 +182,15 @@ export default function Order() {
                 pagination={{total: total, current: page, pageSize: pageSize}}
                 dataSource={orders}
                 onChange={(pagination, filters, sorter) => {
-                    console.log(sorter)
-                    let obj = {
+                    var obj = {
                         page: pagination.current,
                         pageSize: pagination.pageSize,
+                        sorter_field: '',
+                        sorter_order: '',
                     }
-                    if (sorter) {
-
-                        // obj['sorter_field'] = sorter
+                    if (!Array.isArray(sorter)) {
+                        obj['sorter_field'] = sorter.field as string || ''
+                        obj['sorter_order'] = sorter.order as string || ''
                     }
                     reloadPage(obj)
                 }}

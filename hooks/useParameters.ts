@@ -9,12 +9,17 @@ export default function useParameters () {
         page,
         pageSize,
         order_id,
-        order_no
+        order_no,
+        sorter_field,
+        sorter_order,
     } = router.query
 
     let idN = parseQueryParamToNumber(id)
     let pageN = parseQueryParamToNumber(page)
     let pageSizeN = parseQueryParamToNumber(pageSize)
+
+    sorter_field = parseQueryParam(sorter_field)
+    sorter_order = parseQueryParam(sorter_order)
 
     let order_idN = parseQueryParamToNumber(order_id)
     order_no = parseQueryParam(order_no)
@@ -31,6 +36,8 @@ export default function useParameters () {
         pageSize: pageSizeN,
 
         order_id: order_idN,
-        order_no
+        order_no,
+        sorter_field,
+        sorter_order
     }
 }

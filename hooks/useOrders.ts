@@ -6,9 +6,13 @@ import {ListReponse} from "@/types/common";
 import {Order} from "@/types/orders";
 
 export default function useOrders(customerNo: string) {
-    const {page, pageSize} = useParameters()
+    const {page, pageSize, sorter_order, sorter_field} = useParameters()
 
-    const key = `/api/orders?page=${page}&pageSize=${pageSize}&customer_no=${customerNo}`
+    let key = `/api/orders?page=${page}&pageSize=${pageSize}&customer_no=${customerNo}`
+    if (sorter_order&&sorter_field) {
+        key = `/api/orders?page=${page}&pageSize=${pageSize}&customer_no=${customerNo}&sorter_field=${sorter_field}&sorter_order=${sorter_order}`
+    }
+
     const {data, error, mutate, isValidating} = useSWR<ListReponse<Order>>(
         `${host}${key}`,
         fetcher
