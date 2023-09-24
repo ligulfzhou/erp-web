@@ -36,23 +36,26 @@ const items: MenuProps["items"] = [
                 "key": `/order/${customer}`,
                 "label": `${customer}客户`
             })),
-            {
-                'key': '/order',
-                'label': '所有客户'
-            }
+            // {
+            //     'key': '/order',
+            //     'label': '所有客户'
+            // }
         ]
     },
     {
         key: 'order-goods',
         icon: React.createElement(LaptopOutlined),
         label: "订单商品",
-        children: [...customers.map(customer => ({
-            "key": `/goods/order/${customer}`,
-            "label": `${customer}客户`
-        })), {
-            'key': '/goods/order',
-            'label': '所有客户'
-        }]
+        children: [
+            ...customers.map(customer => ({
+                "key": `/goods/order/${customer}`,
+                "label": `${customer}客户`
+            })),
+            // {
+            //     'key': '/goods/order',
+            //     'label': '所有客户'
+            // }
+        ]
     },
     {
         key: 'customer',
@@ -105,7 +108,7 @@ const LayoutWithMenu: FC<Props> = ({
                     lien后台管理
                 </div>
                 <div>
-                    <Avatar icon={<UserOutlined />} />
+                    <Avatar icon={<UserOutlined/>}/>
                 </div>
             </Header>
             <Layout>
