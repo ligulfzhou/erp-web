@@ -6,6 +6,7 @@ import {useRouter} from "next/router";
 import {parseQueryParam} from "@/utils/utils";
 import useParameters from "@/hooks/useParameters";
 import useOrderDates from "@/hooks/useOrderDates";
+import useRouterUtils from "@/hooks/useRouterUtils";
 
 
 export default function Order() {
@@ -13,8 +14,8 @@ export default function Order() {
     const {page, pageSize} = useParameters()
     let customerNo = parseQueryParam(router.query.customerNo)
     const {dateWithOrders, total, isLoading} = useOrderDates(customerNo)
+    const {reloadPage} = useRouterUtils()
 
-    console.log("index..")
     const columns: ColumnsType<DateWithOrders> = [
         {
             title: "日期",
@@ -32,7 +33,8 @@ export default function Order() {
                             key={`order-${order.id}`}
                             className='cursor-pointer'
                             onClick={() => {
-                                router.replace(`/goods/order/${customerNo}/${order.order_no}`)
+                                const back = router.asPath;
+                                router.replace(`/goods/order/${customerNo}/${order.order_no}?back=${JSON.stringify(back)}`)
                             }}
                         >
                             {order.order_no}
@@ -59,6 +61,12 @@ export default function Order() {
                     columns={columns}
                     pagination={{total: total, current: page, pageSize: pageSize}}
                     dataSource={dateWithOrders}
+                    onChange={(pagination, filters, sorter) => {
+                        reloadPage({
+                            page: pagination.current,
+                            pageSize: pagination.pageSize,
+                        })
+                    }}
                 />
             </div>
         </LayoutWithMenu>
