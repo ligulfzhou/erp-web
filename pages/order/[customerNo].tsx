@@ -178,7 +178,6 @@ export default function Order() {
     }
     const [form] = Form.useForm();
     const {mutate} = useSWRConfig()
-    // const formValues = {}
 
     const searchOrders = () => {
         const formParams: {
@@ -227,7 +226,6 @@ export default function Order() {
         form.resetFields()
     }
 
-
     return (
         <LayoutWithMenu>
             <OrderModal
@@ -257,6 +255,7 @@ export default function Order() {
                         console.log("refresh....")
                         setRefresh(true)
                         mutate(key).finally(() => setRefresh(false))
+                        // mutate(key)
                     }}
                 >
                     刷新
