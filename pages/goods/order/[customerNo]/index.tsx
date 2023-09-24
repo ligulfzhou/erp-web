@@ -7,6 +7,7 @@ import {parseQueryParam} from "@/utils/utils";
 import useParameters from "@/hooks/useParameters";
 import useOrderDates from "@/hooks/useOrderDates";
 import useRouterUtils from "@/hooks/useRouterUtils";
+import {b64Encode} from "@/utils/b64";
 
 
 export default function Order() {
@@ -34,7 +35,7 @@ export default function Order() {
                             className='cursor-pointer'
                             onClick={() => {
                                 const back = router.asPath;
-                                router.replace(`/goods/order/${customerNo}/${order.order_no}?back=${JSON.stringify(back)}`)
+                                router.replace(`/goods/order/${customerNo}/${order.order_no}?back=${b64Encode(back)}`)
                             }}
                         >
                             {order.order_no}

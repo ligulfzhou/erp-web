@@ -8,6 +8,7 @@ import useParameters from "@/hooks/useParameters";
 import useOrderPlainItems from "@/hooks/useOrderPlainItems";
 import {LeftOutlined} from "@ant-design/icons";
 import useRouterUtils from "@/hooks/useRouterUtils";
+import {b64Decode} from "@/utils/b64";
 
 
 const columns: ColumnsType<OrderPlainItemsModel> = [
@@ -84,9 +85,16 @@ const columns: ColumnsType<OrderPlainItemsModel> = [
 
 export default function Order() {
     const router = useRouter()
+    const { back } = router.query;
+
+
     const {page, pageSize} = useParameters()
     let customerNo = parseQueryParam(router.query.customerNo)
     let orderNo = parseQueryParam(router.query.orderNo)
+    let backPath = `/goods/order/${customerNo}`
+    if (back) {
+        backPath = b64Decode(parseQueryParam(back));
+    }
     const {orderItems, total, isLoading, isError} = useOrderPlainItems(0, orderNo)
     const {reloadPage}= useRouterUtils();
     return (
@@ -94,10 +102,7 @@ export default function Order() {
             <div className='m-2 p-5 bg-white rounded'>
                 <a
                     className='mr-2'
-                    href='#'
-                    onClick={(event) => {
-                        event.preventDefault()
-                    }}
+                    href={backPath}
                 >
                     <LeftOutlined/>
                     返回
