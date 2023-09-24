@@ -11,9 +11,7 @@ import {
     getNotesForOneProgress
 } from "@/utils/utils";
 import useRouterUtils from "@/hooks/useRouterUtils";
-import {MarkProgressParam} from "@/requests/order";
-import {record} from "zod";
-import MarkProgressModal, {MarkProgressProps} from "@/components/order/MarkProgressModal";
+import MarkProgressModal from "@/components/order/MarkProgressModal";
 import {useSWRConfig} from "swr";
 
 interface Props {

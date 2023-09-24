@@ -174,6 +174,7 @@ export default function Order() {
             </div>
 
             <Table
+                rowKey={"id"}
                 size={"middle"}
                 loading={isLoading || (refresh && isValidating)}
                 columns={columns}
