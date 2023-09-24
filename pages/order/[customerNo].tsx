@@ -247,6 +247,7 @@ export default function Order() {
                 order={order} orderNo={orderNo}
             />
 
+            {/* 按钮 */}
             <div className='p-5 m-2 bg-white rounded text-black gap-2 flex flex-row'>
                 <Button
                     loading={refresh}
@@ -350,6 +351,7 @@ export default function Order() {
                 </Form>
             </div>
 
+            {/* 表格 */}
             <div className='bg-white p-5 m-2 rounded overflow-auto'>
                 <Table
                     rowKey={"id"}
@@ -374,7 +376,6 @@ export default function Order() {
                     }}
                 />
             </div>
-
         </LayoutWithMenu>
     );
 
