@@ -143,6 +143,12 @@ export function parseQueryParamToNumber(p: string[] | string | undefined) {
     return 0
 }
 
+export function parseQueryParamToBoolean(p: string[] | string | undefined) {
+    let pstr = parseQueryParam(p)
+    return pstr == 'true';
+}
+
+
 export function parseQueryParamToNumberArray(p: string[] | string | undefined) {
     let res: number[] = []
     let pstr = parseQueryParam(p)

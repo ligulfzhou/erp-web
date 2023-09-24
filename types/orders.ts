@@ -88,3 +88,16 @@ export interface DateWithOrders {
     date: string;
     orders: Order[];
 }
+
+
+// -------------
+
+export interface OrderSearchParms {
+    order_no: string|undefined,
+    order_date_start: string|undefined,
+    order_date_end: string|undefined,
+    delivery_date_start: string|undefined,
+    delivery_date_end: string|undefined,
+    is_return_order: boolean|undefined,
+    is_urgent: boolean|undefined,
+}

@@ -1,8 +1,8 @@
-import {Table, Space, Button, Tag, Form, Input, DatePicker, Radio, Row, Col, Checkbox} from 'antd';
+import {Table, Space, Button, Tag, Form, Input, DatePicker, Row, Col, Checkbox} from 'antd';
 import LayoutWithMenu from "@/components/Layouts/LayoutWithMenu";
 import {ColumnsType} from "antd/es/table";
 import useOrders from "@/hooks/useOrders";
-import {Order} from '@/types'
+import {Order, OrderSearchParms} from '@/types'
 import {useRouter} from "next/router";
 import {getColorWithStepAndIndex, getDepartmentAndNotesWithStepAndIndex, parseQueryParam} from "@/utils/utils";
 import useParameters from "@/hooks/useParameters";
@@ -11,6 +11,9 @@ import React, {useEffect, useState} from "react";
 import OrderModal from "@/components/order/OrderModal";
 import useRouterUtils from "@/hooks/useRouterUtils";
 import OrderGoodsDetailModal from "@/components/order/OrderGoodsDetailModal";
+import {mutate} from "swr";
+import moment from "moment";
+import {dateFormat} from "@/utils/const";
 
 const {RangePicker} = DatePicker;
 
@@ -18,23 +21,29 @@ export default function Order() {
     const router = useRouter()
     const {page, pageSize, order_id, order_no} = useParameters()
     let customerNo = parseQueryParam(router.query.customerNo)
-    const {orders, total, isLoading, isValidating, key, mutate} = useOrders(customerNo)
+    const {orders, total, isLoading, isValidating, key, mutate: mutateData} = useOrders(customerNo)
     const [refresh, setRefresh] = useState<boolean>(false);
-    const {reloadPage} = useRouterUtils()
+    const {reloadPage, removeParams} = useRouterUtils()
 
     const [order, setOrder] = useState<Order | undefined>();
     const [orderNo, setOrderNo] = useState<string>('');
+
     useEffect(() => {
-        if (order_id || order_no) {
-            setOpenOrderModal(true)
-        }
-    }, [order_id, order_no]);
+        // 用户切换tab时，清掉form
+        form.resetFields()
+    }, [customerNo]);
+
+    // useEffect(() => {
+    //     if (order_id || order_no) {
+    //         setOpenOrderModal(true)
+    //     }
+    // }, [order_id, order_no]);
 
     const columns: ColumnsType<Order> = [
         {
             title: 'ID',
             dataIndex: 'id',
-            sorter: (a, b)=> a.id - b.id
+            sorter: (a, b) => a.id - b.id
         },
         {
             title: "订单编号",
@@ -137,7 +146,7 @@ export default function Order() {
 
     const formValues = {}
     const onSearch = () => {
-
+        console.log('on search...')
     }
     return (
         <LayoutWithMenu>
@@ -147,7 +156,6 @@ export default function Order() {
                     setOpenOrderModal(false)
                     if (success) {
                         setRefresh(true)
-                        // @ts-ignore
                         mutate(key).finally(() => setRefresh(false))
                     }
                 }}
@@ -191,7 +199,7 @@ export default function Order() {
                     layout={'horizontal'}
                     initialValues={formValues}
                     labelCol={{span: 5}}
-                    onFinish={onSearch}
+                    // onFinish={onSearch}
                 >
                     <Row gutter={24}>
                         <Col span={6}>
@@ -234,6 +242,68 @@ export default function Order() {
                                 name="is_urgent"
                             >
                                 <Checkbox/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item>
+                                <div className='flex flex-row justify-center gap-2'>
+                                    <Button type="primary" htmlType="submit"
+                                            onClick={(event) => {
+                                                console.log(form.getFieldsValue())
+                                                event.preventDefault()
+                                                const formParams: {
+                                                    order_no: string|undefined,
+                                                    is_return_order: boolean|undefined,
+                                                    is_urgent: boolean|undefined,
+                                                    order_date: moment.Moment[]|undefined,
+                                                    delivery_date: moment.Moment[]|undefined
+                                                } = form.getFieldsValue();
+                                                let order_date_start: string|undefined = undefined;
+                                                let order_date_end: string|undefined = undefined;
+                                                if (formParams.order_date && formParams.order_date.length==2) {
+                                                    order_date_start = formParams.order_date[0].format(dateFormat)
+                                                    order_date_end = formParams.order_date[1].format(dateFormat)
+                                                }
+
+                                                let delivery_date_start: string|undefined = undefined;
+                                                let delivery_date_end: string|undefined = undefined;
+                                                if (formParams.delivery_date && formParams.delivery_date.length==2) {
+                                                    delivery_date_start = formParams.delivery_date[0].format(dateFormat)
+                                                    delivery_date_end = formParams.delivery_date[1].format(dateFormat)
+                                                }
+                                                let params: OrderSearchParms = {
+                                                    delivery_date_end,
+                                                    delivery_date_start,
+                                                    order_date_end,
+                                                    order_date_start,
+                                                    is_return_order: formParams['is_return_order'],
+                                                    is_urgent: formParams['is_urgent'],
+                                                    order_no: formParams['order_no']
+                                                }
+
+                                                reloadPage(params)
+                                            }}>
+                                        搜索
+                                    </Button>
+
+                                    <Button
+                                        htmlType="submit"
+                                        onClick={() => {
+                                            let obj: OrderSearchParms = {
+                                                delivery_date_end: "",
+                                                delivery_date_start: "",
+                                                is_return_order: false,
+                                                is_urgent: false,
+                                                order_date_end: "",
+                                                order_date_start: "",
+                                                order_no: ""
+                                            }
+                                            removeParams(Object.keys(obj))
+                                            form.resetFields()
+                                        }}>
+                                        重置
+                                    </Button>
+                                </div>
                             </Form.Item>
                         </Col>
                     </Row>

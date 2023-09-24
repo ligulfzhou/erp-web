@@ -5,8 +5,10 @@ import moment from "moment";
 import useSWRMutation from "swr/mutation";
 import {updateOrder, UpdateOrderParam} from "@/requests/order";
 import {Order} from "@/types";
+import {dateFormat} from "@/utils/const";
 
-const dateFormat = 'YYYY-MM-DD';
+
+// const dateFormat = 'YYYY-MM-DD';
 
 interface Props {
     open: boolean,

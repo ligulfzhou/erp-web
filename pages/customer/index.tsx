@@ -64,14 +64,12 @@ export default function Order() {
                         setAddCustomer(true)
                     }}
                 >
-                    Reload
+                    刷新
                 </Button>
             </div>
 
             <div className='p-5 m-2 bg-white rounded'>
-                <div>
-
-                </div>
+                <div></div>
                 <Table
                     size={"small"}
                     loading={isLoading}

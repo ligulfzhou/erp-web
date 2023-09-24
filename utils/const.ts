@@ -2,8 +2,8 @@ export const maxTableColumnStrLen: number = 25
 
 export const host = 'http://127.0.0.1:9100'
 
-// export const defaultPageSize = 50
-export const defaultPageSize = 10
+export const defaultPageSize = 50
+// export const defaultPageSize = 2
 
 
 interface Option {
@@ -18,6 +18,8 @@ interface StepProgress {
     department: string,
     options: Option[]
 }
+
+export const dateFormat = 'YYYY-MM-DD';
 
 export const progresses: StepProgress[] = [
     {
