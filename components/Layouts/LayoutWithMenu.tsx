@@ -1,10 +1,13 @@
 import React, {FC, ReactNode, useEffect, useState} from 'react';
 import {DollarCircleOutlined, LaptopOutlined, LineChartOutlined, UserOutlined} from '@ant-design/icons';
-import {Avatar, Dropdown, Layout, Menu, MenuProps} from 'antd';
+import {Avatar, Dropdown, Layout, Menu, MenuProps, message} from 'antd';
 import {useRouter} from "next/router";
 import {useIsMounted} from "@/hooks/useIsMounted";
 import useAccountInfo from "@/hooks/useAccountInfo";
 import {usePathname} from "next/navigation";
+import useSWRMutation from "swr/mutation";
+import {addCustomer} from "@/requests";
+import {login, logout} from "@/requests/account";
 
 const {Header, Content, Sider} = Layout;
 
@@ -100,6 +103,10 @@ const LayoutWithMenu: FC<Props> = (
             setOpenedKey('customer')
         }
     }, [pathname])
+    const {
+        trigger: callLogoutAPI,
+        isMutating: callingLogoutAPI
+    } = useSWRMutation('/api/logout', logout)
 
     const isMounted = useIsMounted()
     if (!isMounted) {
@@ -110,9 +117,16 @@ const LayoutWithMenu: FC<Props> = (
         {
             key: '1',
             label: (
-                <a href="#" onClick={(event) => {
+                <a href="#"
+                   onClick={(event) => {
                     event.preventDefault()
-                    console.log("logout...")
+                       callLogoutAPI().then(res=> {
+                           if (res.code===0) {
+                               router.replace('/login')
+                           } else {
+                               message.error(res.msg)
+                           }
+                       })
                 }}>
                     退出
                 </a>
@@ -127,8 +141,14 @@ const LayoutWithMenu: FC<Props> = (
                     lien后台管理
                 </div>
                 <div>
-                    <Dropdown menu={{dropDownMenus}} arrow={true}>
-                        <Avatar icon={<UserOutlined/>}/>
+                    <Dropdown menu={{items: dropDownMenus}} trigger={['hover', 'click']}>
+                        <div className='flex flex-row items-center'>
+                            <div className='text-white'>
+                                {account?.name}({account?.department})
+                            </div>
+
+                            <Avatar icon={<UserOutlined/>}/>
+                        </div>
                     </Dropdown>
                 </div>
             </Header>
