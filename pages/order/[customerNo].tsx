@@ -25,7 +25,6 @@ export default function Order() {
     } = useParameters()
     let customerNo = parseQueryParam(router.query.customerNo)
     const {orders, total, isLoading, isValidating, key} = useOrders(customerNo)
-    console.log(key)
     const [refresh, setRefresh] = useState<boolean>(false);
     const {reloadPage, removeParams} = useRouterUtils()
 
@@ -207,7 +206,9 @@ export default function Order() {
             order_date_start,
             is_return_order: formParams['is_return_order'],
             is_urgent: formParams['is_urgent'],
-            order_no: formParams['order_no']
+            order_no: formParams['order_no'],
+            page: 1,
+            pageSize: pageSize
         }
 
         reloadPage(params)
@@ -220,7 +221,9 @@ export default function Order() {
             is_urgent: false,
             order_date_end: "",
             order_date_start: "",
-            order_no: ""
+            order_no: "",
+            page: 1,
+            pageSize: pageSize
         }
         removeParams(Object.keys(obj))
         form.resetFields()

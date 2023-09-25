@@ -1,6 +1,6 @@
 import React, {FC, ReactNode, useEffect, useState} from 'react';
 import {DollarCircleOutlined, LaptopOutlined, LineChartOutlined, UserOutlined} from '@ant-design/icons';
-import {Avatar, Layout, Menu, MenuProps} from 'antd';
+import {Avatar, Dropdown, Layout, Menu, MenuProps} from 'antd';
 import {useRouter} from "next/router";
 import {useIsMounted} from "@/hooks/useIsMounted";
 import useAccountInfo from "@/hooks/useAccountInfo";
@@ -15,7 +15,7 @@ const {
 let customers = ["L1001", "L1002", "L1003", "L1004", "L1005", "L1006"]
 
 
-const items: MenuProps["items"] = [
+const menuItems: MenuProps["items"] = [
     {
         key: "home",
         icon: React.createElement(LineChartOutlined),
@@ -101,6 +101,20 @@ const LayoutWithMenu: FC<Props> = ({
         return
     }
 
+    const dropDownMenus: MenuProps['items'] = [
+        {
+            key: '1',
+            label: (
+                <a href="#" onClick={(event)=> {
+                    event.preventDefault()
+                    console.log("logout...")
+                }}>
+                    退出
+                </a>
+            ),
+        }
+    ]
+
     return (
         <Layout className='h-screen'>
             <Header className='flex flex-row justify-between h-3'>
@@ -108,7 +122,9 @@ const LayoutWithMenu: FC<Props> = ({
                     lien后台管理
                 </div>
                 <div>
-                    <Avatar icon={<UserOutlined/>}/>
+                    <Dropdown menu={{dropDownMenus}} arrow={true}>
+                        <Avatar icon={<UserOutlined/>}/>
+                    </Dropdown>
                 </div>
             </Header>
             <Layout>
@@ -127,7 +143,7 @@ const LayoutWithMenu: FC<Props> = ({
                         defaultSelectedKeys={[router.asPath]}
                         defaultOpenKeys={[openedKey]}
                         style={{height: '100%', borderRight: 0}}
-                        items={items}
+                        items={menuItems}
                     />
                 </Sider>
                 <Layout>

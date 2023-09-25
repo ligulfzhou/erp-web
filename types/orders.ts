@@ -100,4 +100,6 @@ export interface OrderSearchParms {
     delivery_date_end: string|undefined,
     is_return_order: boolean|undefined,
     is_urgent: boolean|undefined,
+    page: number,
+    pageSize: number,
 }
