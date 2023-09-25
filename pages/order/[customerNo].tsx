@@ -152,25 +152,6 @@ export default function Order() {
                 order={order} orderNo={orderNo}
             />
 
-            {/* 按钮 */}
-            <div className='p-5 m-2 bg-white rounded text-black gap-2 flex flex-row'>
-                <Button
-                    loading={refresh}
-                    type={'primary'}
-                    onClick={() => {
-                        setRefresh(true)
-                        mutate(key).finally(() => setRefresh(false))
-                    }}
-                >
-                    刷新
-                </Button>
-
-                <ExcelImporter callback={() => {
-                    setRefresh(true)
-                    mutate(key).finally(() => setRefresh(false))
-                }}/>
-            </div>
-
             {/*filters*/}
             <div className='bg-white p-5 m-2 rounded'>
                 <OrderSearchForm customerNo={customerNo} />
@@ -178,6 +159,25 @@ export default function Order() {
 
             {/* 表格 */}
             <div className='bg-white p-5 m-2 rounded overflow-auto'>
+                {/*/!* 按钮 *!/*/}
+                <div className='text-black mb-2 flex flex-row gap-2'>
+                    <Button
+                        loading={refresh}
+                        type={'primary'}
+                        onClick={() => {
+                            setRefresh(true)
+                            mutate(key).finally(() => setRefresh(false))
+                        }}
+                    >
+                        刷新
+                    </Button>
+
+                    <ExcelImporter callback={() => {
+                        setRefresh(true)
+                        mutate(key).finally(() => setRefresh(false))
+                    }}/>
+                </div>
+
                 <Table
                     rowKey={"id"}
                     size={"small"}

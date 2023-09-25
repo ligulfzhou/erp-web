@@ -4,12 +4,9 @@ import {Avatar, Dropdown, Layout, Menu, MenuProps} from 'antd';
 import {useRouter} from "next/router";
 import {useIsMounted} from "@/hooks/useIsMounted";
 import useAccountInfo from "@/hooks/useAccountInfo";
+import {usePathname} from "next/navigation";
 
-const {
-    Header,
-    Content,
-    Sider
-} = Layout;
+const {Header, Content, Sider} = Layout;
 
 let customers = ["L1001", "L1002", "L1003", "L1004", "L1005", "L1006"]
 
@@ -77,16 +74,22 @@ interface Props {
 }
 
 
-const LayoutWithMenu: FC<Props> = ({
-                                       children
-                                   }) => {
-
+const LayoutWithMenu: FC<Props> = (
+    {
+        children
+    }
+) => {
     const {account, code, isLoading} = useAccountInfo()
     const router = useRouter()
-    const {pathname, push} = router;
+    const {push} = router;
+    const pathname = usePathname()
     const [openedKey, setOpenedKey] = useState<string>('')
 
     useEffect(() => {
+        if (!pathname) {
+            return
+        }
+        console.log(pathname)
         if (pathname.startsWith("/goods/order")) {
             setOpenedKey("order-goods")
         } else if (pathname.startsWith("/order")) {
@@ -107,7 +110,7 @@ const LayoutWithMenu: FC<Props> = ({
         {
             key: '1',
             label: (
-                <a href="#" onClick={(event)=> {
+                <a href="#" onClick={(event) => {
                     event.preventDefault()
                     console.log("logout...")
                 }}>
@@ -142,7 +145,7 @@ const LayoutWithMenu: FC<Props> = ({
                             push(env.key)
                         }}
                         mode="inline"
-                        defaultSelectedKeys={[router.asPath]}
+                        defaultSelectedKeys={[pathname]}
                         defaultOpenKeys={[openedKey]}
                         style={{height: '100%', borderRight: 0}}
                         items={menuItems}
