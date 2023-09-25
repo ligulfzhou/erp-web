@@ -6,8 +6,7 @@ import {useIsMounted} from "@/hooks/useIsMounted";
 import useAccountInfo from "@/hooks/useAccountInfo";
 import {usePathname} from "next/navigation";
 import useSWRMutation from "swr/mutation";
-import {addCustomer} from "@/requests";
-import {login, logout} from "@/requests/account";
+import {logout} from "@/requests/account";
 
 const {Header, Content, Sider} = Layout;
 
@@ -119,15 +118,15 @@ const LayoutWithMenu: FC<Props> = (
             label: (
                 <a href="#"
                    onClick={(event) => {
-                    event.preventDefault()
-                       callLogoutAPI().then(res=> {
-                           if (res.code===0) {
+                       event.preventDefault()
+                       callLogoutAPI().then(res => {
+                           if (res.code === 0) {
                                router.replace('/login')
                            } else {
                                message.error(res.msg)
                            }
                        })
-                }}>
+                   }}>
                     退出
                 </a>
             ),
