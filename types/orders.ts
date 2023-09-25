@@ -102,4 +102,6 @@ export interface OrderSearchParms {
     is_urgent: boolean|undefined,
     page: number,
     pageSize: number,
+    // sorter_field: string|undefined,
+    // sorter_order: string|undefined
 }

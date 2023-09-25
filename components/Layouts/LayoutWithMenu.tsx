@@ -11,9 +11,7 @@ const {
     Sider
 } = Layout;
 
-
 let customers = ["L1001", "L1002", "L1003", "L1004", "L1005", "L1006"]
-
 
 const menuItems: MenuProps["items"] = [
     {
@@ -24,6 +22,10 @@ const menuItems: MenuProps["items"] = [
             {
                 key: "/",
                 label: "统计"
+            },
+            {
+                key: "/stats/returnOrder",
+                label: "返单"
             }
         ]
     },
@@ -89,7 +91,7 @@ const LayoutWithMenu: FC<Props> = ({
             setOpenedKey("order-goods")
         } else if (pathname.startsWith("/order")) {
             setOpenedKey("order")
-        } else if (pathname == '/') {
+        } else if (pathname == '/' || pathname.startsWith("/stats")) {
             setOpenedKey('home')
         } else if (pathname == '/customer') {
             setOpenedKey('customer')
