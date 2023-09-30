@@ -23,8 +23,12 @@ const menuItems: MenuProps["items"] = [
                 label: "统计"
             },
             {
-                key: "/stats/returnOrder",
-                label: "返单"
+                key: "/stats/returnOrder/goods",
+                label: "复购(款式)"
+            },
+            {
+                key: "/stats/returnOrder/items",
+                label: "复购(款式+颜色)"
             },
         ]
     },
