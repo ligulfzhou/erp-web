@@ -12,6 +12,7 @@ const columns: ColumnsType<ReturnOrderStatsByItem> = [
     {
         title: "商品编号",
         dataIndex: "goods_no",
+        width: "180px",
         sorter: (a, b) => a.sku.goods_no.localeCompare(b.sku.goods_no),
         render: (_, record) => (
             <>
@@ -22,6 +23,7 @@ const columns: ColumnsType<ReturnOrderStatsByItem> = [
     {
         title: "名称",
         dataIndex: "name",
+        width: "180px",
         render: (_, record) => (
             <>
                 {record.sku.name}
@@ -55,12 +57,12 @@ const columns: ColumnsType<ReturnOrderStatsByItem> = [
     {
         title: "sku_no",
         dataIndex: "sku_no",
+        width: "150px",
         render: (_, record) => (
             <>
                 {record.sku.sku_no}
             </>
         )
-
     },
     {
         title: "颜色",
@@ -77,7 +79,7 @@ const columns: ColumnsType<ReturnOrderStatsByItem> = [
         title: "购买次数",
         dataIndex: "count",
         width: "120px",
-        sorter: (a, b)=> a.count-b.count,
+        sorter: (a, b) => a.count - b.count,
         render: (_, record) => (
             <>
                 {record.count}
@@ -88,7 +90,7 @@ const columns: ColumnsType<ReturnOrderStatsByItem> = [
         title: "购买数量",
         dataIndex: "sum",
         width: "120px",
-        sorter: (a, b)=> a.sum-b.sum,
+        sorter: (a, b) => a.sum - b.sum,
         render: (_, record) => (
             <>
                 {record.sum}
@@ -107,7 +109,7 @@ export default function Order() {
     return (
         <LayoutWithMenu>
             <div className='m-2 p-5 bg-white rounded'>
-                <StatROSearchForm />
+                <StatROSearchForm/>
             </div>
 
             <div className='p-5 m-2 bg-white rounded overflow-auto'>

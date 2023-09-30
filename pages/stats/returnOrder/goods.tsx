@@ -13,6 +13,7 @@ const columns: ColumnsType<ReturnOrderStatsByGoods> = [
     {
         title: "商品编号",
         dataIndex: "goods_no",
+        width: "150px",
         sorter: (a, b) => a.goods.goods_no.localeCompare(b.goods.goods_no),
         render: (_, record) => (
             <>
@@ -23,6 +24,7 @@ const columns: ColumnsType<ReturnOrderStatsByGoods> = [
     {
         title: "名称",
         dataIndex: "name",
+        width: "150px",
         render: (_, record) => (
             <>
                 {record.goods.name}
