@@ -30,6 +30,10 @@ export default function useParameters() {
         is_return_order,
         is_urgent,
 
+
+        customer_no,
+        // 返单搜索
+        ro_search,
     } = router.query
 
     let idN = parseQueryParamToNumber(id)
@@ -66,6 +70,13 @@ export default function useParameters() {
         mpageSizeN = defaultPageSize
     }
 
+    ro_search = parseQueryParam(ro_search)
+    if(!ro_search){
+        ro_search = 'goods'
+    }
+
+    customer_no = parseQueryParam(customer_no)
+
     return {
         id: idN,
         page: pageN,
@@ -84,6 +95,9 @@ export default function useParameters() {
         delivery_date_start,
         delivery_date_end,
         is_return_order: is_return_orderB,
-        is_urgent: is_urgentB
+        is_urgent: is_urgentB,
+
+        ro_search,
+        customer_no,
     }
 }

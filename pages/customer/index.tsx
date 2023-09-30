@@ -9,51 +9,58 @@ import {defaultPageSize} from "@/utils/const";
 import AddCustomer from "@/components/customer/AddCustomer";
 import {useState} from "react";
 import {useSWRConfig} from "swr"
+import {tr} from "date-fns/locale";
+import EditCustomerModal from "@/components/customer/EditCustomer";
 
-
-const columns: ColumnsType<Customer> = [
-    {
-        title: 'ID',
-        dataIndex: 'id',
-    },
-    {
-        title: '客户编号',
-        dataIndex: "customer_no",
-    },
-    {
-        title: '备注',
-        dataIndex: "notes",
-    },
-    {
-        title: '操作',
-        key: 'action',
-        render: () => (
-            <Space size="middle">
-                <Button>修改</Button>
-            </Space>
-        ),
-    },
-];
 
 export default function Order() {
     const {page, pageSize} = useParameters()
     const {customers, total, isLoading, isError, key} = useCustomers()
-    const [addCustomer, setAddCustomer] = useState<boolean>(false)
+    const [editCustomer, setEditCustomer] = useState<boolean>(false)
     const {reloadPage} = useRouterUtils()
     const {mutate} = useSWRConfig()
+    const columns: ColumnsType<Customer> = [
+        {
+            title: 'ID',
+            dataIndex: 'id',
+        },
+        {
+            title: '客户编号',
+            dataIndex: "customer_no",
+        },
+        {
+            title: '备注',
+            dataIndex: "notes",
+        },
+        {
+            title: '操作',
+            key: 'action',
+            render: (_, record) => (
+                <a href='#' onClick={(event) => {
+                    event.preventDefault()
+                    setCustomer(record)
+                    setEditCustomer(true)
+                }}>
+                    查看
+                </a>
+            ),
+        },
+    ];
 
     const [refresh, setRefresh] = useState<boolean>(false)
+    const [customer, setCustomer] = useState<Customer | undefined>()
     return (
         <LayoutWithMenu>
-            <AddCustomer
-                open={addCustomer}
+            <EditCustomerModal
+                open={editCustomer}
                 closeFn={(success) => {
-                    setAddCustomer(false)
+                    setEditCustomer(false)
                     if (success) {
                         setRefresh(true)
-                        mutate(key).finally(()=> setRefresh(false))
+                        mutate(key).finally(() => setRefresh(false))
                     }
                 }}
+                customer={customer}
             />
 
             <div className='p-5 m-2 bg-white rounded'>
@@ -61,7 +68,8 @@ export default function Order() {
                     loading={refresh}
                     type="primary"
                     onClick={() => {
-                        setAddCustomer(true)
+                        setRefresh(true)
+                        mutate(key).finally(() => setRefresh(false))
                     }}
                 >
                     刷新
@@ -69,10 +77,11 @@ export default function Order() {
             </div>
 
             <div className='p-5 m-2 bg-white rounded'>
-                <div></div>
                 <Table
+                    rowKey={'id'}
+                    bordered={true}
                     size={"small"}
-                    loading={isLoading}
+                    loading={isLoading || refresh}
                     columns={columns}
                     pagination={{
                         total: total,

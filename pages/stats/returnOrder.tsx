@@ -5,12 +5,14 @@ import useParameters from "@/hooks/useParameters";
 import useRouterUtils from "@/hooks/useRouterUtils";
 import useReturnOrderStats from "@/hooks/useReturnOrderStats";
 import {ReturnOrderStats} from "@/types/stats";
+import StatROSearchForm from "@/components/stats/returnOrder/StatROSearchForm";
 
 
 const columns: ColumnsType<ReturnOrderStats> = [
     {
         title: "商品编号",
         dataIndex: "goods_no",
+        sorter: (a, b) => a.sku.goods_no.localeCompare(b.sku.goods_no),
         render: (_, record) => (
             <>
                 {record.sku.goods_no}
@@ -75,6 +77,7 @@ const columns: ColumnsType<ReturnOrderStats> = [
         title: "购买次数",
         dataIndex: "count",
         width: "120px",
+        sorter: (a, b)=> a.count-b.count,
         render: (_, record) => (
             <>
                 {record.count}
@@ -83,8 +86,9 @@ const columns: ColumnsType<ReturnOrderStats> = [
     },
     {
         title: "购买数量",
-        dataIndex: "count",
+        dataIndex: "sum",
         width: "120px",
+        sorter: (a, b)=> a.sum-b.sum,
         render: (_, record) => (
             <>
                 {record.sum}
@@ -103,7 +107,7 @@ export default function Order() {
     return (
         <LayoutWithMenu>
             <div className='m-2 p-5 bg-white rounded'>
-
+                <StatROSearchForm />
             </div>
 
             <div className='p-5 m-2 bg-white rounded overflow-auto'>
@@ -116,10 +120,17 @@ export default function Order() {
                     pagination={{total: total, current: page, pageSize: pageSize}}
                     dataSource={returnOrderStats}
                     onChange={(pagination, filters, sorter) => {
-                        reloadPage({
+                        var obj = {
                             page: pagination.current,
                             pageSize: pagination.pageSize,
-                        })
+                            sorter_field: '',
+                            sorter_order: '',
+                        }
+                        if (!Array.isArray(sorter)) {
+                            obj['sorter_field'] = sorter.field as string || ''
+                            obj['sorter_order'] = sorter.order as string || ''
+                        }
+                        reloadPage(obj)
                     }}
                 />
             </div>

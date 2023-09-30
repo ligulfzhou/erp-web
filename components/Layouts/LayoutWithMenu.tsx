@@ -25,7 +25,7 @@ const menuItems: MenuProps["items"] = [
             {
                 key: "/stats/returnOrder",
                 label: "返单"
-            }
+            },
         ]
     },
     {

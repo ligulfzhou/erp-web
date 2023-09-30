@@ -1,18 +1,19 @@
 import React, {FC, useState} from "react";
-import {Modal, Form, Button, Input, message, Spin} from "antd";
+import {Modal, Form, Input} from "antd";
+import {Customer} from "@/types";
 
 
 interface Props {
     open: boolean,
-    closeFn: ()=> void,
-    id: number
+    closeFn: (success: boolean)=> void,
+    customer: Customer|undefined
 }
 
-const AddPRModal: FC<Props> = (
+const EditCustomerModal: FC<Props> = (
     {
         open,
         closeFn,
-        id
+        customer
     }
 ) => {
     const [savePRError, setSavePRError] = useState<string>('')
@@ -36,19 +37,13 @@ const AddPRModal: FC<Props> = (
                     e.preventDefault()
                     form.resetFields()
                     setSavePRError('')
-                    closeFn()
+                    closeFn(true)
                 }}
                 closable={true}
                 footer={
                     null
                 }
             >
-                {/*{isMutating ? (*/}
-                {/*    <div className='text-center mb-2'>*/}
-                {/*        <Spin /> saving pr#{prIdForSearch}...*/}
-                {/*    </div>*/}
-                {/*) : null}*/}
-
                 {savePRError ? (
                     <div className='text-center text-red-600 font-bold text-pink-darker mb-2'>
                         Error: {savePRError}
@@ -57,41 +52,44 @@ const AddPRModal: FC<Props> = (
 
                 <Form
                     form={form}
-                    name="basic"
+                    name="修改客户"
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 16 }}
                     style={{ maxWidth: 600 }}
-                    initialValues={{ remember: true }}
+                    initialValues={{ customer }}
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
-                    // autoComplete="off"
                 >
                     <Form.Item
-                        label="PR ID"
-                        name="prid"
-                        rules={[{ required: true, message: 'Please input PR ID!' }]}
+                        label="客户编号"
+                        name="customer_no"
+                        rules={[{required: true, message: '请输入客户编号!'}]}
                     >
-                        <Input
-                            // onChange={(env)=>{
-                            //     if (env.target.value && !containsOnlyNumbers(env.target.value)) {
-                            //         setSavePRError(`pr_id#${env.target.value} not valid`)
-                            //         return;
-                            //     }
-                            //     setSavePRError('')
-                            //     setPrIdforSearch(parseInt(env.target.value))
-                            // }}
-                        />
+                        <Input/>
                     </Form.Item>
 
-                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                        <Button type="primary" htmlType="submit">
-                            ADD
-                        </Button>
+                    <Form.Item
+                        label="备注"
+                        name="notes"
+                        rules={[{required: false, message: '请输入备注!'}]}
+                    >
+                        <Input/>
                     </Form.Item>
+
+                    {/*<Form.Item wrapperCol={{offset: 8, span: 16}}>*/}
+                    {/*    <Button*/}
+                    {/*        disabled={callingAddCustomerAPI}*/}
+                    {/*        loading={callingAddCustomerAPI}*/}
+                    {/*        type="primary"*/}
+                    {/*        htmlType="submit"*/}
+                    {/*    >*/}
+                    {/*        添加*/}
+                    {/*    </Button>*/}
+                    {/*</Form.Item>*/}
                 </Form>
             </Modal>
         </div>
     )
 }
 
-export default AddPRModal
+export default EditCustomerModal

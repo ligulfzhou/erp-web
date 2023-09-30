@@ -2,8 +2,6 @@ import React, {FC, useEffect} from "react";
 import {Form, Input, DatePicker, Checkbox, Col, Button} from "antd";
 import useRouterUtils from "@/hooks/useRouterUtils";
 import moment from "moment";
-import useSWRMutation from "swr/mutation";
-import {updateOrder} from "@/requests/order";
 import {OrderSearchParms} from "@/types";
 import {dateFormat} from "@/utils/const";
 import useParameters from "@/hooks/useParameters";
@@ -69,11 +67,6 @@ const OrderSearchForm: FC<Props> = (
 
         form.setFieldsValue(values)
     }, [customerNo]);
-
-    const {
-        trigger: callUpdateOrderAPI,
-        isMutating: callingUpdateOrderAPI
-    } = useSWRMutation('/api/order/update', updateOrder)
 
     const searchOrders = () => {
         const formParams: {
