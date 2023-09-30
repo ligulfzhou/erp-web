@@ -4,7 +4,7 @@ import useRouterUtils from "@/hooks/useRouterUtils";
 import useParameters from "@/hooks/useParameters";
 
 interface StatROSearchParms {
-    ro_search: string|undefined,
+    // ro_search: string|undefined,
     customer_no: string|undefined,
     page: number,
     pageSize: number,
@@ -18,13 +18,13 @@ const OrderSearchForm: FC = () => {
     useEffect(() => {
         // 用户切换tab时，清掉form
         let values = {}
-        if (ro_search) {
-            // @ts-ignore
-            values['ro_search'] = ro_search
-        } else {
-            // @ts-ignore
-            values['ro_search'] = undefined
-        }
+        // if (ro_search) {
+        //     // @ts-ignore
+        //     values['ro_search'] = ro_search
+        // } else {
+        //     // @ts-ignore
+        //     values['ro_search'] = undefined
+        // }
 
         if (ro_search) {
             // @ts-ignore
@@ -44,7 +44,7 @@ const OrderSearchForm: FC = () => {
 
         let params: StatROSearchParms = {
             customer_no: formParams['customer_no'] || '',
-            ro_search: formParams['ro_search'],
+            // ro_search: formParams['ro_search'],
             page: 1,
             pageSize: pageSize
         }
@@ -54,7 +54,7 @@ const OrderSearchForm: FC = () => {
     const reset = () => {
         let obj: StatROSearchParms = {
             customer_no: '',
-            ro_search: '',
+            // ro_search: '',
             page: 1,
             pageSize: pageSize
         }
@@ -70,25 +70,25 @@ const OrderSearchForm: FC = () => {
                 layout={'horizontal'}
             >
                 <div className='flex flex-row justify-around flex-wrap items-start'>
-                    <div className='w-80'>
-                        <Form.Item
-                            label="类型"
-                            name="ro_search"
-                        >
-                            <Select
-                                options={[
-                                    {
-                                        value: 'goods',
-                                        label: '款式',
-                                    },
-                                    {
-                                        value: 'items',
-                                        label: '款式+颜色',
-                                    },
-                                ]}
-                            />
-                        </Form.Item>
-                    </div>
+                    {/*<div className='w-80'>*/}
+                    {/*    <Form.Item*/}
+                    {/*        label="类型"*/}
+                    {/*        name="ro_search"*/}
+                    {/*    >*/}
+                    {/*        <Select*/}
+                    {/*            options={[*/}
+                    {/*                {*/}
+                    {/*                    value: 'goods',*/}
+                    {/*                    label: '款式',*/}
+                    {/*                },*/}
+                    {/*                {*/}
+                    {/*                    value: 'items',*/}
+                    {/*                    label: '款式+颜色',*/}
+                    {/*                },*/}
+                    {/*            ]}*/}
+                    {/*        />*/}
+                    {/*    </Form.Item>*/}
+                    {/*</div>*/}
 
                     <div className='w-80'>
                         <Form.Item
