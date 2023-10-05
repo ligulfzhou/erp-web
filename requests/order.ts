@@ -29,3 +29,11 @@ export interface MarkProgressParam {
 export async function markProgress(url: string, {arg}: {arg: MarkProgressParam}) {
     return commonEmptyPost(url, arg)
 }
+
+
+export interface DeleteOrderParam {
+    id: number
+}
+export async function deleteOrder(url: string, {arg}: {arg: DeleteOrderParam}) {
+    return commonEmptyPost(url, arg)
+}

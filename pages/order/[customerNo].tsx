@@ -1,4 +1,4 @@
-import {Table, Space, Button, Tag, Form} from 'antd';
+import {Table, Space, Button, Tag} from 'antd';
 import LayoutWithMenu from "@/components/Layouts/LayoutWithMenu";
 import {ColumnsType} from "antd/es/table";
 import useOrders from "@/hooks/useOrders";
@@ -13,7 +13,7 @@ import useRouterUtils from "@/hooks/useRouterUtils";
 import OrderGoodsDetailModal from "@/components/order/OrderGoodsDetailModal";
 import {useSWRConfig} from "swr";
 import OrderSearchForm from "@/components/order/OrderSearchForm";
-
+import DeleteOrderModal from "@/components/order/DeleteOrderModal";
 
 export default function Order() {
     const router = useRouter()
@@ -110,6 +110,16 @@ export default function Order() {
                         }>
                         查看订单商品
                     </a>
+
+                    <a
+                        key={`${record.id}-delete`}
+                        href='#'
+                        onClick={(event) => {
+                            event.preventDefault()
+                            showDeleteOrderModal(record)
+                        }}>
+                        删除订单
+                    </a>
                 </Space>
             ),
         },
@@ -128,11 +138,32 @@ export default function Order() {
         setOrder(record)
         setOrderNo(record.order_no)
     }
-    const [form] = Form.useForm();
     const {mutate} = useSWRConfig()
+
+    const [openDeleteOrderModal, setOpenDeleteOrderModal] = useState<boolean>(false)
+
+    const showDeleteOrderModal = (record: Order) => {
+        setOpenDeleteOrderModal(true)
+        setOrder(record)
+        setOrderNo(record.order_no)
+    }
 
     return (
         <LayoutWithMenu>
+            <DeleteOrderModal
+                open={openDeleteOrderModal}
+                closeFn={(success) => {
+                    setOpenDeleteOrderModal(false)
+                    setOpenOrderModal(false)
+                    if (success) {
+                        setRefresh(true)
+                        mutate(key).finally(() => setRefresh(false))
+                    }
+                }}
+                order={order}
+                orderNo={orderNo}
+            />
+
             <OrderModal
                 open={openOrderModal}
                 closeFn={(success) => {
@@ -154,7 +185,7 @@ export default function Order() {
 
             {/*filters*/}
             <div className='bg-white p-5 m-2 rounded'>
-                <OrderSearchForm customerNo={customerNo} />
+                <OrderSearchForm customerNo={customerNo}/>
             </div>
 
             {/* 表格 */}
