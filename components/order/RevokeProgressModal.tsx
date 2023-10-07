@@ -25,15 +25,19 @@ const RevokeProgressModal: FC<Props> = (
     } = useSWRMutation('/api/revoke/progress', revokeProgress)
 
     console.log(progress)
+
     const onOk = ()=> {
-        // callDeleteOrderAPI({id: order?.id}).then((data)=>{
-        //     if(data.code!==0) {
-        //         message.error(data.msg)
-        //     } else {
-        //         message.success("删除成功")
-        //         closeFn(true)
-        //     }
-        // })
+        if (!progress){
+            return
+        }
+        callRevokeProgressAPI({id:progress.id}).then((data)=>{
+            if(data.code!==0) {
+                message.error(data.msg)
+            } else {
+                message.success("撤销成功")
+                closeFn(true)
+            }
+        })
     }
 
     return (
