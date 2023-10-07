@@ -20,7 +20,7 @@ const OrderSearchForm: FC<Props> = (
     const {removeParams, reloadPage} = useRouterUtils();
 
     const {
-         pageSize,
+        pageSize,
         order_no, order_date_start, order_date_end, delivery_date_start, delivery_date_end, is_return_order, is_urgent
     } = useParameters()
 
@@ -72,9 +72,10 @@ const OrderSearchForm: FC<Props> = (
         const formParams: {
             order_no: string | undefined,
             is_return_order: boolean | undefined,
+            is_special: boolean | undefined,
             is_urgent: boolean | undefined,
             order_date: moment.Moment[] | undefined,
-            delivery_date: moment.Moment[] | undefined
+            delivery_date: moment.Moment[] | undefined,
         } = form.getFieldsValue();
         let order_date_start: string | undefined = undefined;
         let order_date_end: string | undefined = undefined;
@@ -96,6 +97,7 @@ const OrderSearchForm: FC<Props> = (
             order_date_start,
             is_return_order: formParams['is_return_order'],
             is_urgent: formParams['is_urgent'],
+            is_spacial: formParams['is_special'],
             order_no: formParams['order_no'],
             page: 1,
             pageSize: pageSize,
@@ -109,6 +111,7 @@ const OrderSearchForm: FC<Props> = (
             delivery_date_start: "",
             is_return_order: false,
             is_urgent: false,
+            is_spacial: false,
             order_date_end: "",
             order_date_start: "",
             order_no: "",
@@ -154,7 +157,7 @@ const OrderSearchForm: FC<Props> = (
                         </Form.Item>
                     </div>
                     <div className='w-80 flex flex-row items-center gap-2 justify-center'>
-                        <div className='w-40'>
+                        <div className='w-25'>
                             <Form.Item
                                 label="返单"
                                 name="is_return_order"
@@ -163,10 +166,19 @@ const OrderSearchForm: FC<Props> = (
                                 <Checkbox/>
                             </Form.Item>
                         </div>
-                        <div className='w-40'>
+                        <div className='w-25'>
                             <Form.Item
                                 label="加急"
                                 name="is_urgent"
+                                valuePropName='checked'
+                            >
+                                <Checkbox/>
+                            </Form.Item>
+                        </div>
+                        <div className='w-25'>
+                            <Form.Item
+                                label="特别客人"
+                                name="is_special"
                                 valuePropName='checked'
                             >
                                 <Checkbox/>

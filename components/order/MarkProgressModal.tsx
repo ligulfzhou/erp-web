@@ -73,6 +73,7 @@ const MarkProgressModal: FC<MarkProgressProps> = (
             <Modal
                 width={'400px'}
                 open={open}
+                centered={true}
                 title={`标记流程`}
                 onCancel={(e) => {
                     form.resetFields()

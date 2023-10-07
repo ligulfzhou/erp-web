@@ -1,6 +1,6 @@
 import React, {FC, useState} from "react";
 import {Modal, message, Table, Image, Tag, TableColumnsType} from "antd";
-import {Order, OrderGoods, OrderItem} from "@/types";
+import {OneProgress, Order, OrderGoods, OrderItem} from "@/types";
 import useOrderGoodsItems from "@/hooks/useOrderGoodsItems";
 import {ColumnsType} from "antd/es/table";
 import useParameters from "@/hooks/useParameters";
@@ -13,6 +13,7 @@ import {
 import useRouterUtils from "@/hooks/useRouterUtils";
 import MarkProgressModal from "@/components/order/MarkProgressModal";
 import {mutate} from "swr";
+import RevokeProgressModal from "@/components/order/RevokeProgressModal";
 
 interface Props {
     open: boolean,
@@ -142,12 +143,21 @@ const OrderGoodsDetailModal: FC<Props> = (
             render: (_, record) => {
                 return (
                     <>
-                        {record.steps.map(step => (
+                        {record.steps.map((step, index) => (
                             <div
                                 key={`${step.id}`}
                                 className=''
                             >
-                                {formatDateTime(new Date(step.dt))}: {step.account_name}({step.department}): {getNotesForOneProgress(step)}
+                                <div className='inline-block'>
+                                    {formatDateTime(new Date(step.dt))}: {step.account_name}({step.department}): {getNotesForOneProgress(step)}
+                                    {index == record.steps.length - 1 ? (
+                                        <a href='#' onClick={(event) => {
+                                            event.preventDefault()
+                                            triggerRevokeProgressModal(step)
+                                            console.log("delete progress...")
+                                        }}> 撤销 </a>
+                                    ) : null}
+                                </div>
                             </div>
                         ))}
                     </>
@@ -161,7 +171,7 @@ const OrderGoodsDetailModal: FC<Props> = (
                 return (
                     <>
                         {record.is_next_action ? (
-                            <a href='#' onClick={()=> {
+                            <a href='#' onClick={() => {
                                 openMarkProgressModal({
                                     order_goods_id: 0,
                                     order_item_id: record.id,
@@ -201,6 +211,14 @@ const OrderGoodsDetailModal: FC<Props> = (
     }
     const [isOpenMarkProgressModal, setIsOpenMarkProgressModal] = useState<boolean>(false);
 
+    const [isOpenRevokeProgressModal, setIsOpenRevokeProgressModal] = useState<boolean>(false);
+    const [progressToTrigger, setProgressToTrigger] = useState<OneProgress | undefined>(undefined)
+
+    const triggerRevokeProgressModal = (progress: OneProgress) => {
+        setIsOpenRevokeProgressModal(true)
+        setProgressToTrigger(progress)
+    }
+
     return (
         <Modal
             className='rounded-xl'
@@ -224,6 +242,17 @@ const OrderGoodsDetailModal: FC<Props> = (
                 order_goods_id={orderGoodsId}
                 order_item_id={orderItemId}
                 currentStep={currentStep}
+            />
+
+            <RevokeProgressModal
+                open={isOpenRevokeProgressModal}
+                closeFn={(success) => {
+                    setIsOpenRevokeProgressModal(false)
+                    if (success) {
+                        mutate(key).finally()
+                    }
+                }}
+                progress={progressToTrigger}
             />
 
             <Table

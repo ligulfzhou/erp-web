@@ -26,6 +26,8 @@ export interface Order {
     delivery_date: number,
     is_return_order: boolean,
     is_urgent: boolean
+    is_special: boolean,
+    special_customer: string,
     steps: StepIndexCount[];
 }
 
@@ -100,6 +102,7 @@ export interface OrderSearchParms {
     delivery_date_end: string|undefined,
     is_return_order: boolean|undefined,
     is_urgent: boolean|undefined,
+    is_spacial: boolean|undefined,
     page: number,
     pageSize: number,
     // sorter_field: string|undefined,

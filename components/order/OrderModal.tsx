@@ -41,7 +41,9 @@ const OrderModal: FC<Props> = (
             order_date: order?.order_date ? moment(order.order_date) : undefined,
             delivery_date: order?.delivery_date ? moment(order.delivery_date) : undefined,
             is_return_order: order?.is_return_order ? order.is_return_order : false,
-            is_urgent: order?.is_urgent ? order.is_urgent : false
+            is_urgent: order?.is_urgent ? order.is_urgent : false,
+            is_special: order?.is_special ? order.is_special : false,
+            special_customer: order?.special_customer ? order.special_customer : ''
         }
         setFormValues(_formValues)
         form.setFieldsValue(_formValues)
@@ -63,6 +65,9 @@ const OrderModal: FC<Props> = (
         }
         if (values['delivery_date'] && values['delivery_date'] instanceof moment) {
             values['delivery_date'] = values['delivery_date'].format(dateFormat)
+        }
+        if(!values['is_special']) {
+            values['special_customer'] = ''
         }
 
         callUpdateOrderAPI(values).then((res) => {
@@ -188,6 +193,25 @@ const OrderModal: FC<Props> = (
                             <Radio value={false}>否</Radio>
                         </Radio.Group>
                     </Form.Item>
+
+                    <Form.Item
+                        label="特别客人单"
+                        name="is_special"
+                        rules={[{required: true, message: '请选择是否特别客人单!'}]}
+                    >
+                        <Radio.Group>
+                            <Radio value={true}>是</Radio>
+                            <Radio value={false}>否</Radio>
+                        </Radio.Group>
+                    </Form.Item>
+
+                    <Form.Item
+                        label="特别客人"
+                        name="special_customer"
+                    >
+                        <Input/>
+                    </Form.Item>
+
                 </Form>
             </Modal>
         </div>

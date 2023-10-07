@@ -55,13 +55,17 @@ export default function Order() {
             sorter: (a, b) => a.order_date - b.order_date,
         },
         {
-            title: "返单/加急",
+            title: "返单/加急/特别客人",
             key: "return_order_or_urgent",
             dataIndex: 'return_order_or_urgent',
             render: (_, record) => (
                 <>
-                    {record.is_return_order ? <Tag color='red' key={`${record.id}-return`}>返单</Tag> : null}
-                    {record.is_urgent ? <Tag className='yellow' key={`${record.id}-urgent`}>加急单</Tag> : null}
+                    {record.is_return_order ? <Tag color='red'
+                                                   key={`${record.id}-return`}>返单</Tag> : null}
+                    {record.is_urgent ? <Tag className='yellow'
+                                             key={`${record.id}-urgent`}>加急单</Tag> : null}
+                    {record.is_special ? <Tag className='blue'
+                                              key={`${record.id}-speical`}>特别客人: {record.special_customer}</Tag> : null}
                 </>
             )
         },

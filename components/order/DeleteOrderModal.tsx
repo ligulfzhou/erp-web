@@ -3,7 +3,6 @@ import {message, Modal} from "antd";
 import useSWRMutation from "swr/mutation";
 import {deleteOrder} from "@/requests/order";
 import {Order} from "@/types";
-import {da} from "date-fns/locale";
 
 
 interface Props {

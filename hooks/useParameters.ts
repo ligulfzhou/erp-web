@@ -29,7 +29,7 @@ export default function useParameters() {
         delivery_date_end,
         is_return_order,
         is_urgent,
-
+        is_special,
 
         customer_no,
         // 返单搜索
@@ -53,7 +53,7 @@ export default function useParameters() {
     delivery_date_end = parseQueryParam(delivery_date_end)
     let is_return_orderB = parseQueryParamToBoolean(is_return_order)
     let is_urgentB = parseQueryParamToBoolean(is_urgent)
-
+    let is_specialB = parseQueryParamToBoolean(is_special)
 
     let order_idN = parseQueryParamToNumber(order_id)
     order_no = parseQueryParam(order_no)
@@ -96,6 +96,7 @@ export default function useParameters() {
         delivery_date_end,
         is_return_order: is_return_orderB,
         is_urgent: is_urgentB,
+        is_special: is_specialB,
 
         ro_search,
         customer_no,

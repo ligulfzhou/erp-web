@@ -18,11 +18,12 @@ export default function useOrders(customerNo: string) {
         delivery_date_end,
         is_urgent,
         is_return_order,
+        is_special
     } = useParameters()
 
-    let key = `${host}/api/orders?page=${page}&pageSize=${pageSize}&customer_no=${customerNo}&order_no=${order_no}&order_date_start=${order_date_start}&order_date_end=${order_date_end}&delivery_date_start=${delivery_date_start}&delivery_date_end=${delivery_date_end}&is_urgent=${is_urgent}&is_return_order=${is_return_order}`
+    let key = `${host}/api/orders?page=${page}&pageSize=${pageSize}&customer_no=${customerNo}&order_no=${order_no}&order_date_start=${order_date_start}&order_date_end=${order_date_end}&delivery_date_start=${delivery_date_start}&delivery_date_end=${delivery_date_end}&is_urgent=${is_urgent}&is_return_order=${is_return_order}&is_special=${is_special}`
     if (sorter_order && sorter_field) {
-        key = `${host}/api/orders?page=${page}&pageSize=${pageSize}&customer_no=${customerNo}&order_no=${order_no}&order_date_start=${order_date_start}&order_date_end=${order_date_end}&delivery_date_start=${delivery_date_start}&delivery_date_end=${delivery_date_end}&is_urgent=${is_urgent}&is_return_order=${is_return_order}&sorter_field=${sorter_field}&sorter_order=${sorter_order}`
+        key = `${host}/api/orders?page=${page}&pageSize=${pageSize}&customer_no=${customerNo}&order_no=${order_no}&order_date_start=${order_date_start}&order_date_end=${order_date_end}&delivery_date_start=${delivery_date_start}&delivery_date_end=${delivery_date_end}&is_urgent=${is_urgent}&is_return_order=${is_return_order}&is_special=${is_special}&sorter_field=${sorter_field}&sorter_order=${sorter_order}`
     }
 
     const {data, error, mutate, isValidating} = useSWR<ListReponse<Order>>(

@@ -10,7 +10,9 @@ export interface UpdateOrderParam {
     order_date: Moment|string|undefined,
     delivery_date: Moment|string|undefined,
     is_return_order: boolean,
-    is_urgent: boolean
+    is_urgent: boolean,
+    is_special: boolean,
+    special_customer: string,
 }
 
 
@@ -27,6 +29,15 @@ export interface MarkProgressParam {
 }
 
 export async function markProgress(url: string, {arg}: {arg: MarkProgressParam}) {
+    return commonEmptyPost(url, arg)
+}
+
+
+export interface RevokeProgressParam {
+    id: number,
+}
+
+export async function revokeProgress(url: string, {arg}: {arg: RevokeProgressParam}) {
     return commonEmptyPost(url, arg)
 }
 
