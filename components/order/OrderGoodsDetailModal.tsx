@@ -223,6 +223,7 @@ const OrderGoodsDetailModal: FC<Props> = (
         <Modal
             className='rounded-xl'
             width={'1500px'}
+            centered={true}
             open={open}
             title={'订单商品'}
             onCancel={(e) => {

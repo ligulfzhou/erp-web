@@ -62,6 +62,7 @@ const EditCustomerModal: FC<Props> = (
         <div>
             <Modal
                 open={open}
+                centered={true}
                 title='修改客户'
                 onCancel={(e) => {
                     e.preventDefault()

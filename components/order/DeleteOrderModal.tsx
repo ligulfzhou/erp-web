@@ -45,6 +45,7 @@ const DeleteOrderModal: FC<Props> = (
             <Modal
                 width={'400px'}
                 open={open}
+                centered={true}
                 title="订单"
                 onCancel={(e) => {
                     closeFn(false)

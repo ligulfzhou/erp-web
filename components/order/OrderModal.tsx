@@ -87,6 +87,7 @@ const OrderModal: FC<Props> = (
             <Modal
                 width={'400px'}
                 open={open}
+                centered={true}
                 title={`${isEdit ? "编辑" : "添加"}订单`}
                 onCancel={(e) => {
                     form.resetFields()

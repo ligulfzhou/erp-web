@@ -39,6 +39,7 @@ const AddCustomerModal: FC<Props> = (
             <Modal
                 open={open}
                 title='添加客户'
+                centered={true}
                 onCancel={(e) => {
                     e.preventDefault()
                     form.resetFields()
