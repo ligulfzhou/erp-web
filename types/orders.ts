@@ -36,7 +36,7 @@ export interface OrderGoods {
     order_id: number,
     goods_id: number,
     order_no: string,
-    image: string,
+    images: string[],
     name: string,
     package_card: string,
     package_card_des: string
@@ -71,7 +71,7 @@ export interface OrderItem {
 export interface OrderPlainItemsModel {
     id: number;
     name: string;
-    image: string;
+    images: string[];
     sku_no: string;
     count: number;
     unit: string;

@@ -2,7 +2,7 @@ export interface Goods {
     id: number,                  // SERIAL,
     customer_no: string,      // 客户ID
     goods_no: string,         // 类目编号
-    image: string,            // 图片
+    images: string[],            // 图片
     image_des: string,        // 图片描述
     name: string,             // 名称
     plating: string,          // 电镀
@@ -18,7 +18,7 @@ export interface Sku {
     name: string,
     goods_no: string,      // 产品编号 (暂时没有)
     goods_id: number,         // 产品ID
-    image: string, // 商品图片
+    images: string[], // 商品图片
     package_card: string,
     plating: string,       // 电镀
     color: string,         // 颜色

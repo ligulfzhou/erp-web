@@ -19,9 +19,9 @@ export default function Order() {
     const router = useRouter()
     const {page, pageSize} = useParameters()
     let customerNo = parseQueryParam(router.query.customerNo)
-    const {orders, total, isLoading, isValidating, key} = useOrders(customerNo)
+    const {orders, total, isLoading, key} = useOrders(customerNo)
     const [refresh, setRefresh] = useState<boolean>(false);
-    const {reloadPage, removeParams} = useRouterUtils()
+    const {reloadPage} = useRouterUtils()
 
     const [order, setOrder] = useState<Order | undefined>();
     const [orderNo, setOrderNo] = useState<string>('');
