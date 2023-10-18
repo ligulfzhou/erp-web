@@ -1,5 +1,5 @@
-import {Order} from '@/types'
-import {commonDataPost, commonEmptyPost} from "@/requests/common";
+import {DataResponse, ListReponse, Order, OrderGoods} from '@/types'
+import {commonDataGet, commonDataPost, commonEmptyPost, commonListGet} from "@/requests/common";
 import {Moment} from "moment/moment";
 
 
@@ -47,4 +47,15 @@ export interface DeleteOrderParam {
 }
 export async function deleteOrder(url: string, {arg}: {arg: DeleteOrderParam}) {
     return commonEmptyPost(url, arg)
+}
+
+export interface GetOrderItemProgressParam {
+    order_no: string,
+    goods_no: string
+}
+
+
+export async function getOrderItemProgress(url: string, {arg}: {arg: GetOrderItemProgressParam}) {
+    // todo
+    return commonListGet<OrderGoods>(url, arg)
 }

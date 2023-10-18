@@ -65,7 +65,6 @@ export interface OrderItem {
     is_next_action: boolean,
     current_step: number,
     steps: OneProgress[],
-
 }
 
 export interface OrderPlainItemsModel {

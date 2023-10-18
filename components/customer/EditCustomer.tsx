@@ -40,7 +40,6 @@ const EditCustomerModal: FC<Props> = (
         })
     };
 
-
     const [formValues, setFormValues] = useState<UpdateCustomerParam | undefined>(undefined)
 
     useEffect(() => {
@@ -98,17 +97,6 @@ const EditCustomerModal: FC<Props> = (
                     >
                         <Input/>
                     </Form.Item>
-
-                    {/*<Form.Item wrapperCol={{offset: 8, span: 16}}>*/}
-                    {/*    <Button*/}
-                    {/*        disabled={callingAddCustomerAPI}*/}
-                    {/*        loading={callingAddCustomerAPI}*/}
-                    {/*        type="primary"*/}
-                    {/*        htmlType="submit"*/}
-                    {/*    >*/}
-                    {/*        添加*/}
-                    {/*    </Button>*/}
-                    {/*</Form.Item>*/}
                 </Form>
             </Modal>
         </div>
