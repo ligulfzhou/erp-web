@@ -2,6 +2,7 @@ export interface ListResult<T> {
     list: T[]
     total: number
 }
+
 export interface ListReponse<T> {
     code: number
     msg: string
