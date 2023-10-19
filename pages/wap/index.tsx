@@ -1,24 +1,21 @@
-import {Table, Space, Button, Tag, Form, Input, Image, TableColumnsType, message} from 'antd';
+import {Table, Button, Tag, Form, Input, Image, TableColumnsType, message} from 'antd';
 import {ColumnsType} from "antd/es/table";
 import React, {useState} from "react";
-import {useSWRConfig} from "swr";
 import LayoutWithoutMenu from "@/components/Layouts/LayoutWithoutMenu";
 import useSWRMutation from "swr/mutation";
 import {getOrderItemProgress, GetOrderItemProgressParam} from "@/requests/order";
-import {ListReponse, OneProgress, OrderGoods, OrderItem} from "@/types";
+import {OneProgress, OrderGoods, OrderItem} from "@/types";
 import {
     formatDateTime,
     getColorWithStepAndIndex,
     getDepartmentAndNotesWithStepAndIndex,
     getNotesForOneProgress
 } from "@/utils/utils";
-import {da} from "date-fns/locale";
+import MarkProgressModal from "@/components/order/MarkProgressModal";
+import RevokeProgressModal from "@/components/order/RevokeProgressModal";
 
 
-export default function Order() {
-    const [refresh, setRefresh] = useState<boolean>(false);
-    const {mutate} = useSWRConfig()
-
+export default function Index() {
     const [orderGoodsId, setOrderGoodsId] = useState<number>(0)
     const [orderItemId, setOrderItemId] = useState<number>(0)
     const [currentStep, setCurrentStep] = useState<number>(0)
@@ -215,10 +212,19 @@ export default function Order() {
 
 
     const [orderGoods, setOrderGoods] = useState<OrderGoods[]>([])
-    const onFinish = (values: GetOrderItemProgressParam) => {
-        console.log('Success:', values);
-        console.log(form.getFieldsValue())
-        callGetOrderItemProgress(values).then(data => {
+    const [param, setParam] = useState<GetOrderItemProgressParam|undefined>(undefined)
+    const fetchOrderItemProgress = (values: GetOrderItemProgressParam|undefined=undefined)=> {
+        let pp: GetOrderItemProgressParam
+        if (values) {
+            pp = values
+        } else if (param) {
+            pp = param
+        } else {
+            message.error("应该不太可能出现")
+            return
+        }
+
+        callGetOrderItemProgress(pp).then(data => {
             console.log(data)
             if (data.code !== 0) {
                 message.error(data.msg)
@@ -226,27 +232,21 @@ export default function Order() {
                 setOrderGoods(data.data.list)
             }
         })
+    }
+
+    const onFinish = (values: GetOrderItemProgressParam) => {
+        setParam(values)
+        console.log(values)
+        fetchOrderItemProgress(values)
     };
 
     return (
         <LayoutWithoutMenu>
-            <div className='p-5 m-2 bg-white rounded  flex flex-row'>
-                <Button
-                    loading={refresh}
-                    onClick={() => {
-                        setRefresh(true)
-                        // mutate(key).finally(() => setRefresh(false))
-                    }}
-                    type="primary">
-                    刷新
-                </Button>
-            </div>
-
             <div className='p-5 m-2 bg-white rounded'>
                 <Form
                     onFinish={onFinish}
                     labelCol={{span: 8}}
-                    wrapperCol={{span: 16}}
+                    wrapperCol={{span: 8}}
                     form={form}
                 >
                     <Form.Item label="订单号" name="order_no" rules={[{required: true}]}>
@@ -257,7 +257,7 @@ export default function Order() {
                         <Input/>
                     </Form.Item>
 
-                    <Form.Item label=" ">
+                    <Form.Item label="">
                         <Button type="primary" htmlType="submit">
                             查询
                         </Button>
@@ -266,24 +266,48 @@ export default function Order() {
             </div>
 
             <div className='p-5 m-2 bg-white rounded overflow-auto'>
+                <MarkProgressModal
+                    open={isOpenMarkProgressModal}
+                    closeFn={(success) => {
+                        setIsOpenMarkProgressModal(false)
+                        if (success) {
+                            fetchOrderItemProgress()
+                        }
+                    }}
+                    order_goods_id={orderGoodsId}
+                    order_item_id={orderItemId}
+                    currentStep={currentStep}
+                />
+
+                <RevokeProgressModal
+                    open={isOpenRevokeProgressModal}
+                    closeFn={(success) => {
+                        setIsOpenRevokeProgressModal(false)
+                        if (success) {
+                            fetchOrderItemProgress()
+                        }
+                    }}
+                    progress={progressToTrigger}
+                />
                 <Table
                     rowKey={'id'}
                     className='mx-1 overflow-auto'
                     size={"small"}
                     loading={callingGetOrderItemProgress}
                     bordered={true}
-                    // loading={isLoading || (refresh && isValidating)}
                     columns={columns}
-                    // pagination={null}
                     dataSource={orderGoods}
+                    pagination={false}
                     expandable={{
-                        // expandRowByClick: true,
+                        defaultExpandAllRows: true,
                         columnTitle: "查看SKU",
                         expandedRowRender: ((record, index, indent, expanded) => (
-                            <div className='p-2'>
+                            <div
+                                key={`${record.id}-${index}`}
+                                className='p-2'>
                                 <Table
                                     size={"small"}
-                                    rowKey={`${record.id}`}
+                                    rowKey={`${record.id}-${index}`}
                                     bordered={true}
                                     pagination={false}
                                     dataSource={record.items}
@@ -296,5 +320,4 @@ export default function Order() {
             </div>
         </LayoutWithoutMenu>
     );
-
 };
