@@ -45,13 +45,11 @@ export default function Order() {
         {
             title: "下单时间",
             dataIndex: "order_date",
-            // defaultSortOrder: 'descend',
             sorter: (a, b) => a.order_date - b.order_date,
         },
         {
             title: "交付时间",
             dataIndex: "delivery_date",
-            // defaultSortOrder: 'descend',
             sorter: (a, b) => a.order_date - b.order_date,
         },
         {
