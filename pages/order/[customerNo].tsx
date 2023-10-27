@@ -69,7 +69,7 @@ export default function Order() {
         },
 
         {
-            title: "出错/完成/总(流程数)",
+            title: "异常/完成/总(流程数)",
             key: "return_order_or_urgent",
             dataIndex: 'return_order_or_urgent',
             render: (_, record) => (
