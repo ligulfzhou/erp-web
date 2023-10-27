@@ -28,6 +28,9 @@ export interface Order {
     is_urgent: boolean
     is_special: boolean,
     special_customer: string,
+    done_count: number,
+    exception_count: number,
+    total_count: number,
     steps: StepIndexCount[];
 }
 

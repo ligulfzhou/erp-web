@@ -69,6 +69,17 @@ export default function Order() {
                 </>
             )
         },
+
+        {
+            title: "出错/完成/总(流程数)",
+            key: "return_order_or_urgent",
+            dataIndex: 'return_order_or_urgent',
+            render: (_, record) => (
+                <>
+                    {record.exception_count}/{record.done_count}/{record.total_count}
+                </>
+            )
+        },
         {
             title: "流程进度",
             key: "step_count",

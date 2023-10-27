@@ -101,6 +101,7 @@ export default function Order() {
 
             <div className='p-5 m-2 bg-white rounded overflow-auto'>
                 <Table
+                    rowKey={`id`}
                     size={"small"}
                     loading={isLoading || (refresh && isValidating)}
                     columns={columns}
