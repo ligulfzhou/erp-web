@@ -104,7 +104,7 @@ export interface OrderSearchParms {
     delivery_date_end: string|undefined,
     is_return_order: boolean|undefined,
     is_urgent: boolean|undefined,
-    is_spacial: boolean|undefined,
+    is_special: boolean|undefined,
     page: number,
     pageSize: number,
     // sorter_field: string|undefined,
