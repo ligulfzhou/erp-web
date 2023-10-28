@@ -46,7 +46,6 @@ const ExcelImporter: FC<Props> = (
                     message.error(`导入失败: ${res.msg}`);
                 }
             } else if (info.file.status === 'error') {
-                console.log(loadingMessage)
                 let res = info.file.response as EmptyResponse;
                 message.destroy(key)
                 message.error(`导入失败: ${res.msg}`);
