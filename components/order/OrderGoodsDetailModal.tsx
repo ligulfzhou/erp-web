@@ -234,6 +234,7 @@ const OrderGoodsDetailModal: FC<Props> = (
             open={open}
             title={'订单商品'}
             onCancel={(e) => {
+                removeParams(['mpage', 'mpageSize'])
                 closeFn(false)
             }}
             closable={true}
