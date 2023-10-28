@@ -4,6 +4,10 @@ import {Button, message, Upload} from 'antd';
 import React, {FC} from 'react';
 import {host} from "@/utils/const";
 import {EmptyResponse} from "@/types";
+import {Message} from "postcss";
+import {MessageType} from "antd/lib/message";
+import {Simulate} from "react-dom/test-utils";
+import load = Simulate.load;
 
 interface Props {
     callback: () => void
@@ -15,6 +19,7 @@ const ExcelImporter: FC<Props> = (
     }
 ) => {
     const key = 'excel_importer';
+    let loadingMessage: MessageType | null = null;
 
     const props: UploadProps = {
         name: 'file',
@@ -24,27 +29,27 @@ const ExcelImporter: FC<Props> = (
         accept: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel",
         onChange(info) {
             if (info.file.status === 'uploading') {
-                message.loading({content: "正在上传excel..", key})
-                console.log(info.file, info.fileList);
+                if (!loadingMessage) {
+                    loadingMessage = message.loading({content: "正在上传excel..", key: key, duration: 0})
+                    console.log(info.file, info.fileList);
+                }
             }
 
             if (info.file.status === 'done') {
                 let res = info.file.response as EmptyResponse;
                 if (res.code == 0) {
-                    message.success({
-                        content: '导入成功', key
-                    });
+                    message.destroy(key)
+                    message.success('导入成功');
                     callback()
                 } else {
-                    message.error({
-                        content: `导入失败: ${res.msg}`, key
-                    });
+                    message.destroy(key)
+                    message.error(`导入失败: ${res.msg}`);
                 }
             } else if (info.file.status === 'error') {
+                console.log(loadingMessage)
                 let res = info.file.response as EmptyResponse;
-                message.error({
-                    content: `导入失败: ${res.msg}`, key
-                });
+                message.destroy(key)
+                message.error(`导入失败: ${res.msg}`);
             }
         },
     };
