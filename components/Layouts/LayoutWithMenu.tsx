@@ -89,30 +89,30 @@ const LayoutWithMenu: FC<Props> = (
     const router = useRouter()
     const {push} = router;
     const pathname = usePathname()
-    const [openedKey, setOpenedKey] = useState<string>('')
+    console.log(pathname)
 
-    useEffect(() => {
-        if (!pathname) {
-            return
-        }
-        if (pathname.startsWith("/goods/order")) {
-            setOpenedKey("order-goods")
-        } else if (pathname.startsWith("/order")) {
-            setOpenedKey("orders")
-        } else if (pathname == '/' || pathname.startsWith("/stats")) {
-            setOpenedKey('home')
-        } else if (pathname == '/customer') {
-            setOpenedKey('customer')
-        }
-    }, [pathname])
     const {
         trigger: callLogoutAPI,
         isMutating: callingLogoutAPI
     } = useSWRMutation('/api/logout', logout)
 
     const isMounted = useIsMounted()
-    if (!isMounted) {
+    if (!isMounted || !pathname) {
         return
+    }
+
+    const openedKeyFromPathname = (pathname: string) => {
+        if (pathname.startsWith("/goods/order")) {
+            return "order-goods"
+        } else if (pathname.startsWith("/order")) {
+            return "orders"
+        } else if (pathname == '/' || pathname.startsWith("/stats")) {
+            return 'home'
+        } else if (pathname == '/customer') {
+            return 'customer'
+        } else {
+            return ''
+        }
     }
 
     const dropDownMenus: MenuProps['items'] = [
@@ -167,8 +167,10 @@ const LayoutWithMenu: FC<Props> = (
                             push(env.key)
                         }}
                         mode="inline"
-                        selectedKeys={[pathname]}
-                        openKeys={[openedKey]}
+                        defaultSelectedKeys={[pathname]}
+                        // selectedKeys={[pathname]}
+                        defaultOpenKeys={[openedKeyFromPathname(pathname)]}
+                        // openKeys={[openedKey]}
                         style={{height: '100%', borderRight: 0}}
                         items={menuItems}
                     />
