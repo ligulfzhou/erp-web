@@ -153,7 +153,7 @@ const OrderGoodsDetailModal: FC<Props> = (
                     <div className='flex flex-row gap-1'>
                         {record.notes_images.map((image_url, index) => (
                             <Image
-                                key={`image-${index}`}
+                                key={`notes_image-${record.id}-${index}`}
                                 width={60}
                                 height={60}
                                 src={image_url}
