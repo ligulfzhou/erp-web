@@ -33,7 +33,7 @@ const menuItems: MenuProps["items"] = [
         ]
     },
     {
-        key: 'order',
+        key: 'orders',
         icon: React.createElement(DollarCircleOutlined),
         label: "订单管理",
         children: [
@@ -95,11 +95,10 @@ const LayoutWithMenu: FC<Props> = (
         if (!pathname) {
             return
         }
-        console.log(pathname)
         if (pathname.startsWith("/goods/order")) {
             setOpenedKey("order-goods")
         } else if (pathname.startsWith("/order")) {
-            setOpenedKey("order")
+            setOpenedKey("orders")
         } else if (pathname == '/' || pathname.startsWith("/stats")) {
             setOpenedKey('home')
         } else if (pathname == '/customer') {
@@ -168,8 +167,8 @@ const LayoutWithMenu: FC<Props> = (
                             push(env.key)
                         }}
                         mode="inline"
-                        defaultSelectedKeys={[pathname]}
-                        defaultOpenKeys={[openedKey]}
+                        selectedKeys={[pathname]}
+                        openKeys={[openedKey]}
                         style={{height: '100%', borderRight: 0}}
                         items={menuItems}
                     />

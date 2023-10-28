@@ -47,7 +47,6 @@ export interface OrderGoods {
     is_next_action: boolean,
     current_step: number, // 如果 is_next_action=false，这里的值则没有意义
     current_index: number,
-    // current_notes: string,
     steps: StepIndexCount[],
     items: OrderItem[],
 }
