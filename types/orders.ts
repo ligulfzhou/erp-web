@@ -62,7 +62,8 @@ export interface OrderItem {
     count: number,
     unit: string,
     unit_price: number | null,
-    total_price: number | null
+    total_price: number | null,
+    notes_images: string[],
     notes: string | null
 
     is_next_action: boolean,
