@@ -3,6 +3,7 @@ import {login} from "@/requests/account";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
 import {Button, Form, Input, message} from "antd";
 import {useRouter} from "next/router";
+import {useWindowSize} from "@/hooks/useWindowSize";
 
 
 export default function Index() {
@@ -12,6 +13,10 @@ export default function Index() {
     } = useSWRMutation("/api/login", login)
 
     const router = useRouter()
+    // console.log(headers())
+
+    const {width: windowWidth} = useWindowSize()
+
     const onFinish = (values: {account: string, password: string}) => {
         console.log('Success:', values);
 
@@ -20,7 +25,11 @@ export default function Index() {
             password: values.password
         }).then(res=> {
             if (res.code==0) {
-                router.replace('/')
+                if(!!windowWidth && windowWidth < 992){
+                    router.replace('/wap')
+                } else {
+                    router.replace('/')
+                }
             } else {
                 message.error(res.msg)
             }
