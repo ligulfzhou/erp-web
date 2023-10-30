@@ -101,6 +101,11 @@ const LayoutWithMenu: FC<Props> = (
         return
     }
 
+    if(code==401) {
+        console.log('redirect to /login page')
+        router.push('/login')
+    }
+
     const openedKeyFromPathname = (pathname: string) => {
         if (pathname.startsWith("/goods/order")) {
             return "order-goods"

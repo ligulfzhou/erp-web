@@ -80,7 +80,6 @@ export interface OrderPlainItemsModel {
     unit_price: number;
     total_price: number;
     notes: string;
-    step: number;
     package_card: string,
     is_next_action: boolean;
     current_index: number;

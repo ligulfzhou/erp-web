@@ -1,10 +1,9 @@
-import React, {FC, ReactNode, useEffect, useState} from 'react';
-import {DollarCircleOutlined, LaptopOutlined, LineChartOutlined, UserOutlined} from '@ant-design/icons';
+import React, {FC, ReactNode} from 'react';
+import { UserOutlined} from '@ant-design/icons';
 import {Avatar, Dropdown, Layout, Menu, MenuProps, message} from 'antd';
 import {useRouter} from "next/router";
 import {useIsMounted} from "@/hooks/useIsMounted";
 import useAccountInfo from "@/hooks/useAccountInfo";
-import {usePathname} from "next/navigation";
 import useSWRMutation from "swr/mutation";
 import {logout} from "@/requests/account";
 
@@ -22,7 +21,7 @@ const LayoutWithoutMenu: FC<Props> = (
         children
     }
 ) => {
-    const {account, code, isLoading} = useAccountInfo()
+    const {account, code, msg, isLoading} = useAccountInfo()
     const router = useRouter()
 
     const {
@@ -33,6 +32,11 @@ const LayoutWithoutMenu: FC<Props> = (
     const isMounted = useIsMounted()
     if (!isMounted) {
         return
+    }
+
+    if (code==401) {
+        console.log('redirect to /login page')
+        router.push('/login')
     }
 
     const dropDownMenus: MenuProps['items'] = [
