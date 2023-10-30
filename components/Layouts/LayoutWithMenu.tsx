@@ -101,7 +101,7 @@ const LayoutWithMenu: FC<Props> = (
         return
     }
 
-    if(code==401) {
+    if (code == 401) {
         console.log('redirect to /login page')
         router.push('/login')
     }
@@ -143,13 +143,15 @@ const LayoutWithMenu: FC<Props> = (
 
     return (
         <Layout className='h-screen'>
-            <Header className='flex flex-row justify-between h-3'>
-                <div className="demo-logo font-bold text-white">
-                    lien后台管理
+            <Header className='flex flex-row justify-between justify-items-center'>
+                <div className="font-bold cursor-pointer">
+                    <a href='/' target='_self' className='text-white'>
+                        lien后台管理
+                    </a>
                 </div>
-                <div>
+                <div className=''>
                     <Dropdown menu={{items: dropDownMenus}} trigger={['hover', 'click']}>
-                        <div className='flex flex-row items-center'>
+                        <div className='flex flex-row items-center justify-items-center'>
                             <div className='text-white'>
                                 {account?.name}({account?.department})
                             </div>

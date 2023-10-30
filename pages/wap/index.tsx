@@ -212,8 +212,8 @@ export default function Index() {
 
 
     const [orderGoods, setOrderGoods] = useState<OrderGoods[]>([])
-    const [param, setParam] = useState<GetOrderItemProgressParam|undefined>(undefined)
-    const fetchOrderItemProgress = (values: GetOrderItemProgressParam|undefined=undefined)=> {
+    const [param, setParam] = useState<GetOrderItemProgressParam | undefined>(undefined)
+    const fetchOrderItemProgress = (values: GetOrderItemProgressParam | undefined = undefined) => {
         let pp: GetOrderItemProgressParam
         if (values) {
             pp = values
@@ -257,11 +257,13 @@ export default function Index() {
                         <Input/>
                     </Form.Item>
 
-                    <Form.Item label="">
-                        <Button type="primary" htmlType="submit">
-                            查询
-                        </Button>
-                    </Form.Item>
+                    <div className='flex flex-row justify-center'>
+                        <Form.Item label="">
+                            <Button type="primary" htmlType="submit">
+                                查询
+                            </Button>
+                        </Form.Item>
+                    </div>
                 </Form>
             </div>
 

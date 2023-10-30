@@ -62,9 +62,11 @@ const LayoutWithoutMenu: FC<Props> = (
 
     return (
         <Layout className='h-screen'>
-            <Header className='flex flex-row justify-between h-3'>
-                <div className="demo-logo font-bold text-white">
-                    lien后台管理
+            <Header className='flex flex-row justify-between'>
+                <div className="font-bold cursor-pointer">
+                    <a href='/wap' target='_self' className='text-white'>
+                        lien后台管理
+                    </a>
                 </div>
                 <div>
                     <Dropdown menu={{items: dropDownMenus}} trigger={['hover', 'click']}>
