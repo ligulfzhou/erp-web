@@ -102,7 +102,11 @@ export const getDepartmentAndNotesWithStepAndIndex= (step: number, index: number
         if (progress.step == step) {
             for (let option of progress.options) {
                 if (option.index==index) {
-                    return `${department}:${option.name}`
+                    if (department=='业务部' && step==8) {
+                        return `${department}(${progress.name}):${option.name}`
+                    } else {
+                        return `${department}:${option.name}`
+                    }
                 }
             }
         }
