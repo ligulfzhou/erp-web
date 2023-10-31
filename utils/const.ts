@@ -152,7 +152,59 @@ export const progresses: StepProgress[] = [
         ]
     },
     {
-        step: 5,
+        step:5,
+        name: "碰焊",
+        department: "碰焊部",
+        options: [
+            {
+                index: 3,
+                name:"外发",
+                color: "#7030A1"
+            },
+            {
+                index: 4,
+                name:"碰焊人员1",
+                color: "#02B151",
+            },
+            {
+                index: 5,
+                name:"碰焊人员2",
+                color: "#FFC100",
+            },
+            {
+                index: 6,
+                name: "碰焊人员3",
+                color: "#FF0000"
+            },
+            {
+                index: 7,
+                name: "碰焊人员4",
+                color: "#BF0101",
+            },
+            {
+                index: 8,
+                name: "碰焊人员5",
+                color: "#D9E4BC"
+            },
+            {
+                index: 9,
+                name: "碰焊人员6",
+                color: "#8DB3E2"
+            },
+            {
+                index: 1,
+                name: "异常(备注)",
+                color: "#C9D2DC"
+            },
+            {
+                index: 2,
+                name: "已完成",
+                color: "#C9D2DC"
+            }
+        ]
+    },
+    {
+        step: 6,
         name: "包装",
         department: "包装部",
         options: [
@@ -179,7 +231,7 @@ export const progresses: StepProgress[] = [
         ]
     },
     {
-        step: 6,
+        step: 7,
         name: "出货",
         department: "装箱部",
         options: [
@@ -196,7 +248,7 @@ export const progresses: StepProgress[] = [
         ]
     },
     {
-        step: 7,
+        step: 8,
         name: "拍照",
         department: "业务部",
         options: [
