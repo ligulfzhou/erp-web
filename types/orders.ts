@@ -27,6 +27,7 @@ export interface Order {
     is_return_order: boolean,
     is_urgent: boolean
     is_special: boolean,
+    build_by: number,
     special_customer: string,
     done_count: number,
     exception_count: number,
@@ -104,6 +105,7 @@ export interface OrderSearchParms {
     is_return_order: boolean|undefined,
     is_urgent: boolean|undefined,
     is_special: boolean|undefined,
+    build_by: number|undefined,
     page: number,
     pageSize: number,
     // sorter_field: string|undefined,

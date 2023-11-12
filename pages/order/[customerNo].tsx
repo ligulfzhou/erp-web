@@ -4,7 +4,12 @@ import {ColumnsType} from "antd/es/table";
 import useOrders from "@/hooks/useOrders";
 import {Order} from '@/types'
 import {useRouter} from "next/router";
-import {getColorWithStepAndIndex, getDepartmentAndNotesWithStepAndIndex, parseQueryParam} from "@/utils/utils";
+import {
+    buildByToText,
+    getColorWithStepAndIndex,
+    getDepartmentAndNotesWithStepAndIndex,
+    parseQueryParam
+} from "@/utils/utils";
 import useParameters from "@/hooks/useParameters";
 import ExcelImporter from "@/components/uploader/ExcelImporter";
 import React, {useState} from "react";
@@ -39,6 +44,15 @@ export default function Order() {
             render: (text) => (
                 <div className='font-medium'>
                     {text}
+                </div>
+            )
+        },
+        {
+            title: "类型",
+            dataIndex: 'build_by',
+            render: (_, record) => (
+                <div>
+                    {buildByToText(record.build_by)}
                 </div>
             )
         },
@@ -219,7 +233,12 @@ export default function Order() {
                     <ExcelImporter callback={() => {
                         setRefresh(true)
                         mutate(key).finally(() => setRefresh(false))
-                    }}/>
+                    }} title={"导入手工订单"}/>
+
+                    <ExcelImporter callback={() => {
+                        setRefresh(true)
+                        mutate(key).finally(() => setRefresh(false))
+                    }} title={"导入不锈钢订单"}/>
                 </div>
 
                 <Table

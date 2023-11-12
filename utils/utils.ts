@@ -261,3 +261,14 @@ export function maxOf<T>(arr: Array<T>) {
     }
     return res
 }
+
+
+export const buildByToText = (build_by: number)=> {
+    if (build_by==0) {
+        return '不明'
+    } else if (build_by==1) {
+        return '手工订单'
+    } else {
+        return '不锈钢订单'
+    }
+}

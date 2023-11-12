@@ -1,5 +1,5 @@
 import React, {FC, useEffect} from "react";
-import {Form, Input, DatePicker, Checkbox, Col, Button} from "antd";
+import {Form, Input, DatePicker, Checkbox, Col, Button, Select} from "antd";
 import useRouterUtils from "@/hooks/useRouterUtils";
 import moment from "moment";
 import {OrderSearchParms} from "@/types";
@@ -21,7 +21,8 @@ const OrderSearchForm: FC<Props> = (
 
     const {
         pageSize,
-        order_no, order_date_start, order_date_end, delivery_date_start, delivery_date_end, is_return_order, is_urgent
+        order_no, order_date_start, order_date_end, delivery_date_start,
+        delivery_date_end, is_return_order, is_urgent, build_by
     } = useParameters()
 
     const [form] = Form.useForm();
@@ -64,6 +65,13 @@ const OrderSearchForm: FC<Props> = (
             // @ts-ignore
             values['is_return_order'] = undefined
         }
+        if (build_by) {
+            // @ts-ignore
+            values['build_by'] = build_by
+        } else {
+            // @ts-ignore
+            values['build_by'] = ''
+        }
 
         form.setFieldsValue(values)
     }, [customerNo]);
@@ -76,6 +84,7 @@ const OrderSearchForm: FC<Props> = (
             is_urgent: boolean | undefined,
             order_date: moment.Moment[] | undefined,
             delivery_date: moment.Moment[] | undefined,
+            build_by: number | undefined
         } = form.getFieldsValue();
         let order_date_start: string | undefined = undefined;
         let order_date_end: string | undefined = undefined;
@@ -99,6 +108,7 @@ const OrderSearchForm: FC<Props> = (
             is_urgent: formParams['is_urgent'],
             is_special: formParams['is_special'],
             order_no: formParams['order_no'],
+            build_by: formParams['build_by'] || 0,
             page: 1,
             pageSize: pageSize,
         }
@@ -114,6 +124,7 @@ const OrderSearchForm: FC<Props> = (
             is_special: false,
             order_date_end: "",
             order_date_start: "",
+            build_by: 0,
             order_no: "",
             page: 1,
             pageSize: pageSize,
@@ -156,6 +167,31 @@ const OrderSearchForm: FC<Props> = (
                             <RangePicker/>
                         </Form.Item>
                     </div>
+
+                    <div className='w-80'>
+                        <Form.Item
+                            label="订单类型"
+                            name="build_by"
+                        >
+                            <Select
+                                options={[
+                                    {
+                                        value: '',
+                                        label: '请选择',
+                                    },
+                                    {
+                                        value: 1,
+                                        label: '手工订单',
+                                    },
+                                    {
+                                        value: 2,
+                                        label: '不锈钢订单',
+                                    },
+                                ]}
+                            />
+                        </Form.Item>
+                    </div>
+
                     <div className='w-80 flex flex-row items-center gap-2 justify-center'>
                         <div className='w-25'>
                             <Form.Item

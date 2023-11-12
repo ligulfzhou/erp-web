@@ -30,6 +30,7 @@ export default function useParameters() {
         is_return_order,
         is_urgent,
         is_special,
+        build_by,
 
         customer_no,
         // 返单搜索
@@ -54,6 +55,7 @@ export default function useParameters() {
     let is_return_orderB = parseQueryParamToBoolean(is_return_order)
     let is_urgentB = parseQueryParamToBoolean(is_urgent)
     let is_specialB = parseQueryParamToBoolean(is_special)
+    let build_byN = parseQueryParamToNumber(build_by)
 
     let order_idN = parseQueryParamToNumber(order_id)
     order_no = parseQueryParam(order_no)
@@ -97,6 +99,7 @@ export default function useParameters() {
         is_return_order: is_return_orderB,
         is_urgent: is_urgentB,
         is_special: is_specialB,
+        build_by: build_byN,
 
         ro_search,
         customer_no,

@@ -4,29 +4,39 @@ import {Button, message, Upload} from 'antd';
 import React, {FC} from 'react';
 import {host} from "@/utils/const";
 import {EmptyResponse} from "@/types";
-import {Message} from "postcss";
 import {MessageType} from "antd/lib/message";
-import {Simulate} from "react-dom/test-utils";
-import load = Simulate.load;
 
 interface Props {
-    callback: () => void
+    callback: () => void,
+    title: "导入手工订单"|"导入不锈钢订单"
 }
 
 const ExcelImporter: FC<Props> = (
     {
-        callback
+        callback,
+        title = "导入手工订单"
     }
 ) => {
     const key = 'excel_importer';
     let loadingMessage: MessageType | null = null;
 
+    const titleToBuildBy = ()=> {
+        if (title=='导入手工订单') {
+            return 1
+        } else if (title=='导入不锈钢订单') {
+            return 2
+        } else {
+            return 0
+        }
+    }
+
     const props: UploadProps = {
         name: 'file',
         multiple: false,
         showUploadList: false,
+        data: {build_by: titleToBuildBy()},
         action: `${host}/api/upload/excel`,
-        accept: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel",
+        accept: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         onChange(info) {
             if (info.file.status === 'uploading') {
                 if (!loadingMessage) {
@@ -56,7 +66,7 @@ const ExcelImporter: FC<Props> = (
     return (
         <>
             <Upload {...props}>
-                <Button icon={<UploadOutlined/>}>导入订单</Button>
+                <Button icon={<UploadOutlined/>}>{title}</Button>
             </Upload>
         </>
     )

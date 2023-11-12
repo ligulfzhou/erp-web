@@ -175,9 +175,7 @@ const LayoutWithMenu: FC<Props> = (
                         }}
                         mode="inline"
                         defaultSelectedKeys={[pathname]}
-                        // selectedKeys={[pathname]}
                         defaultOpenKeys={[openedKeyFromPathname(pathname)]}
-                        // openKeys={[openedKey]}
                         style={{height: '100%', borderRight: 0}}
                         items={menuItems}
                     />
