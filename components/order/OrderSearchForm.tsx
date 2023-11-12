@@ -66,6 +66,7 @@ const OrderSearchForm: FC<Props> = (
             values['is_return_order'] = undefined
         }
         if (build_by) {
+            console.log(build_by)
             // @ts-ignore
             values['build_by'] = build_by
         } else {
@@ -131,6 +132,9 @@ const OrderSearchForm: FC<Props> = (
         }
         removeParams(Object.keys(obj))
         form.resetFields()
+        form.setFieldsValue({
+            'build_by': ''
+        })
     }
 
     return (

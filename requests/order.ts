@@ -13,6 +13,7 @@ export interface UpdateOrderParam {
     is_urgent: boolean,
     is_special: boolean,
     special_customer: string,
+    build_by: number
 }
 
 

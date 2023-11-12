@@ -8,8 +8,6 @@ import {Order} from "@/types";
 import {dateFormat} from "@/utils/const";
 
 
-// const dateFormat = 'YYYY-MM-DD';
-
 interface Props {
     open: boolean,
     closeFn: (success: boolean) => void,
@@ -43,7 +41,8 @@ const OrderModal: FC<Props> = (
             is_return_order: order?.is_return_order ? order.is_return_order : false,
             is_urgent: order?.is_urgent ? order.is_urgent : false,
             is_special: order?.is_special ? order.is_special : false,
-            special_customer: order?.special_customer ? order.special_customer : ''
+            special_customer: order?.special_customer ? order.special_customer : '',
+            build_by: order?.build_by? order.build_by: 0
         }
         setFormValues(_formValues)
         form.setFieldsValue(_formValues)
@@ -145,6 +144,29 @@ const OrderModal: FC<Props> = (
                                 {
                                     value: 'L1006',
                                     label: 'L1006',
+                                },
+                            ]}
+                        />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="订单类型"
+                        name="build_by"
+                        rules={[{required: true, message: '请选择订单类型!'}]}
+                    >
+                        <Select
+                            options={[
+                                {
+                                    value: '',
+                                    label: '请选择',
+                                },
+                                {
+                                    value: 1,
+                                    label: '手工订单',
+                                },
+                                {
+                                    value: 2,
+                                    label: '不锈钢订单',
                                 },
                             ]}
                         />
