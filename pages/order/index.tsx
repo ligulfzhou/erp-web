@@ -96,7 +96,12 @@ export default function Order() {
                 <ExcelImporter callback={()=> {
                     setRefresh(true)
                     mutate(key).finally(() => setRefresh(false))
-                }}/>
+                }} title={'导入手工订单'}/>
+
+                <ExcelImporter callback={()=> {
+                    setRefresh(true)
+                    mutate(key).finally(() => setRefresh(false))
+                }} title={'导入不锈钢订单'}/>
             </div>
 
             <div className='p-5 m-2 bg-white rounded overflow-auto'>
